@@ -2,34 +2,32 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Jogos CT Titã - Filtro Oficial</title>
     <link href="https://fonts.googleapis.com/css2?family=Teko:wght@700&display=swap" rel="stylesheet">
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { 
-            background: #000; 
-            color: #fff; 
-            font-family: 'Teko', 'Segoe UI', sans-serif; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            justify-content: center; 
-            min-height: 100vh; 
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        html, body { 
+            width: 100%; height: 100%; 
+            background: #000; color: #fff; 
+            font-family: 'Teko', sans-serif; 
+            display: flex; align-items: center; justify-content: center; 
             overflow: hidden; 
         }
-        
-        .camera-container {
+
+        /* CONTAINER 9:16 DE STORIES (CÂMERA NATIVA SEM ZOOM) */
+        .stage {
             position: relative;
             width: 100vw;
-            max-width: 430px;
             height: 100vh;
-            max-height: 800px;
-            background: #050505;
+            max-width: 430px;
+            max-height: 860px;
+            background: #000;
             overflow: hidden;
             display: flex;
+            flex-direction: column;
+            justify-content: space-between;
             align-items: center;
-            justify-content: center;
         }
 
         video, canvas {
@@ -40,87 +38,75 @@
             z-index: 1;
         }
 
-        /* ANIMAÇÃO DE FUMAÇA AZUL E VERMELHA NAS LATERAIS */
+        /* FUMAÇA NAS LATERAIS (VERMELHO E AZUL) */
         .smoke-left {
             position: absolute;
-            top: 0; left: -30%;
-            width: 70%; height: 100%;
-            background: radial-gradient(circle at 10% 50%, rgba(220, 38, 38, 0.65), transparent 70%);
-            filter: blur(30px);
+            top: 0; left: -25%;
+            width: 65%; height: 100%;
+            background: radial-gradient(circle at 10% 50%, rgba(220, 38, 38, 0.6), transparent 75%);
+            filter: blur(25px);
             pointer-events: none;
             z-index: 2;
-            animation: pulseLeft 3.5s ease-in-out infinite alternate;
+            animation: pulseL 3.5s ease-in-out infinite alternate;
         }
 
         .smoke-right {
             position: absolute;
-            top: 0; right: -30%;
-            width: 70%; height: 100%;
-            background: radial-gradient(circle at 90% 50%, rgba(37, 99, 235, 0.65), transparent 70%);
-            filter: blur(30px);
+            top: 0; right: -25%;
+            width: 65%; height: 100%;
+            background: radial-gradient(circle at 90% 50%, rgba(37, 99, 235, 0.6), transparent 75%);
+            filter: blur(25px);
             pointer-events: none;
             z-index: 2;
-            animation: pulseRight 3.5s ease-in-out infinite alternate;
+            animation: pulseR 3.5s ease-in-out infinite alternate;
         }
 
-        @keyframes pulseLeft {
-            0% { opacity: 0.55; transform: scale(1); }
-            100% { opacity: 0.9; transform: scale(1.1); }
-        }
-        @keyframes pulseRight {
-            0% { opacity: 0.55; transform: scale(1.1); }
-            100% { opacity: 0.9; transform: scale(1); }
-        }
+        @keyframes pulseL { 0% { opacity: 0.5; } 100% { opacity: 0.85; } }
+        @keyframes pulseR { 0% { opacity: 0.85; } 100% { opacity: 0.5; } }
 
-        /* OVERLAY DOS ELEMENTOS VISUAIS */
+        /* OVERLAY DOS ELEMENTOS */
         .overlay {
             position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            pointer-events: none;
+            top: 0; left: 0; width: 100%; height: 100%;
             z-index: 3;
+            pointer-events: none;
             display: flex;
             flex-direction: column;
+            justify-content: space-between;
             align-items: center;
-            justify-content: flex-end;
-            padding-bottom: 110px;
+            padding: 40px 15px 95px 15px;
         }
 
-        /* BADGE / FRASE EM AZUL E VERMELHO GRADIENTE */
-        .badge-box {
-            position: relative;
+        /* FRASE FIXADA NO TOPO */
+        .badge-card {
             width: 90%;
-            max-width: 350px;
-            margin-bottom: 12px;
-            background: rgba(10, 10, 15, 0.75);
+            max-width: 360px;
+            background: rgba(10, 10, 15, 0.82);
             border: 2px solid;
             border-image: linear-gradient(90deg, #dc2626, #2563eb) 1;
-            border-radius: 12px;
-            padding: 8px 16px;
+            padding: 6px 14px;
             text-align: center;
             backdrop-filter: blur(8px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.9);
-            z-index: 4;
-            transition: opacity 0.2s ease, transform 0.2s ease;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.9);
+            white-space: nowrap;
+            overflow: hidden;
         }
 
         .badge-text {
-            font-size: 28px;
+            font-size: clamp(22px, 6vw, 34px);
             font-weight: 700;
             letter-spacing: 2px;
             text-transform: uppercase;
             background: linear-gradient(90deg, #ff4d4d 0%, #ffffff 50%, #3b82f6 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.9));
+            display: inline-block;
         }
 
-        /* LOGO CT TITÃ NO RODAPÉ */
+        /* LOGO DO CT TITÃ EM 3D NO RODAPÉ */
         .logo-box {
-            position: relative;
             width: 85%;
             max-width: 320px;
-            z-index: 4;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -128,103 +114,86 @@
 
         .logo-3d {
             width: 100%;
-            max-width: 270px;
+            max-width: 280px;
             height: auto;
-            filter: drop-shadow(0px 8px 20px rgba(0, 0, 0, 0.95))
-                    drop-shadow(-2px 0px 10px rgba(220, 38, 38, 0.75))
-                    drop-shadow(2px 0px 10px rgba(37, 99, 235, 0.75));
+            filter: drop-shadow(0px 8px 18px rgba(0, 0, 0, 0.95))
+                    drop-shadow(-3px 0px 10px rgba(220, 38, 38, 0.8))
+                    drop-shadow(3px 0px 10px rgba(37, 99, 235, 0.8));
+            transform: perspective(600px) rotateX(8deg);
         }
 
         .logo-text-fallback {
-            background: linear-gradient(90deg, #dc2626 30%, #2563eb 70%);
+            background: linear-gradient(90deg, #dc2626 30%, #ffffff 50%, #2563eb 70%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            font-size: 42px;
+            font-size: 48px;
             font-weight: 700;
-            letter-spacing: 3px;
-            text-shadow: 0 4px 12px rgba(0,0,0,0.9);
+            letter-spacing: 4px;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.95);
         }
 
-        /* BARRA DE CONTROLES ELEGANTE (GLASSMORPHISM) */
+        /* BARRA DE CONTROLES LIMPA E SIMÉTRICA */
         .controls-bar {
             position: absolute;
-            bottom: 25px;
+            bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
-            width: 90%;
-            max-width: 380px;
+            width: 88%;
+            max-width: 360px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 20px;
-            background: rgba(15, 15, 20, 0.75);
+            padding: 8px 18px;
+            background: rgba(15, 15, 20, 0.85);
             backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.18);
             border-radius: 40px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.85);
             z-index: 10;
+            pointer-events: auto;
         }
 
-        .btn-action {
-            background: linear-gradient(135deg, rgba(220, 38, 38, 0.9), rgba(185, 28, 28, 0.9));
+        .btn-ctrl {
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
             color: #fff;
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            padding: 10px 18px;
-            border-radius: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 8px 16px;
+            border-radius: 20px;
             font-family: 'Segoe UI', sans-serif;
             font-size: 13px;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 6px;
+            display: flex; align-items: center; gap: 4px;
             box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4);
-            transition: all 0.2s ease;
-        }
-
-        .btn-action:active {
-            transform: scale(0.95);
         }
 
         .btn-flip {
-            background: rgba(255, 255, 255, 0.12);
+            background: rgba(255, 255, 255, 0.15);
             border: 1px solid rgba(255, 255, 255, 0.3);
-            color: #fff;
-            width: 44px;
-            height: 44px;
+            color: #fff; width: 42px; height: 42px;
             border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            cursor: pointer;
-            transition: all 0.2s ease;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px; cursor: pointer;
         }
 
-        .btn-capture-main {
+        .btn-shutter {
             background: linear-gradient(135deg, #2563eb, #1d4ed8);
-            width: 62px;
-            height: 62px;
+            width: 56px; height: 56px;
             border-radius: 50%;
             border: 3px solid #ffffff;
             color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            cursor: pointer;
-            box-shadow: 0 0 20px rgba(37, 99, 235, 0.7);
-            transition: all 0.2s ease;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 24px; cursor: pointer;
+            box-shadow: 0 0 18px rgba(37, 99, 235, 0.8);
         }
 
-        .btn-capture-main:active {
-            transform: scale(0.92);
-        }
+        .btn-ctrl:active, .btn-flip:active, .btn-shutter:active { transform: scale(0.93); }
     </style>
 </head>
 <body>
 
-    <div class="camera-container" id="captureArea">
+    <div class="stage" id="stageArea">
+        <!-- Vídeo da Câmera -->
         <video id="webcam" autoplay playsinline muted></video>
 
         <!-- Fumaça Vermelha e Azul -->
@@ -232,12 +201,12 @@
         <div class="smoke-right"></div>
 
         <div class="overlay">
-            <!-- Badge / Frase Estilizada com Mescla Vermelho e Azul -->
-            <div class="badge-box">
+            <!-- FRASE NO TOPO DA TELA -->
+            <div class="badge-card">
                 <span id="badgeText" class="badge-text">[ ATLETA CONFIRMADO ]</span>
             </div>
             
-            <!-- Logo CT Titã em 3D no final da tela -->
+            <!-- LOGO CT TITÃ EM 3D NO RODAPÉ -->
             <div class="logo-box">
                 <img id="logoImg" class="logo-3d" src="ct_tita_logo.png" onerror="tryLoadLogo(this)" alt="CT TITÃ">
                 <span id="logoFallback" class="logo-text-fallback" style="display:none;">CT TITÃ</span>
@@ -245,21 +214,13 @@
         </div>
 
         <canvas id="photoCanvas" style="display: none;"></canvas>
-    </div>
 
-    <!-- Barra Flutuante de Ações Profissional -->
-    <div class="controls-bar">
-        <button class="btn-action" onclick="nextBadge()">
-            <span>🔄</span> Frase
-        </button>
-
-        <button class="btn-capture-main" onclick="takePhoto()" title="Tirar Foto">
-            📸
-        </button>
-
-        <button class="btn-flip" onclick="switchCamera()" title="Inverter Câmera">
-            📷
-        </button>
+        <!-- BARRA DE CONTROLES COM APENAS 1 BOTÃO DE INVERTER CÂMERA -->
+        <div class="controls-bar">
+            <button class="btn-ctrl" onclick="nextBadge()">🔄 Frase</button>
+            <button class="btn-shutter" onclick="takePhoto()" title="Tirar Foto">📸</button>
+            <button class="btn-flip" onclick="switchCam()" title="Trocar Câmera">📷</button>
+        </div>
     </div>
 
     <script>
@@ -271,7 +232,7 @@
         ];
 
         let currentBadgeIndex = 0;
-        let currentFacingMode = 'user'; // 'user' para frontal, 'environment' para traseira
+        let currentFacingMode = 'user';
         let currentStream = null;
 
         const video = document.getElementById('webcam');
@@ -290,38 +251,30 @@
             }
         }
 
-        // Inicializa a câmera sem zoom forçado
         async function startCamera(facing) {
             if (currentStream) {
                 currentStream.getTracks().forEach(track => track.stop());
             }
 
-            const constraints = {
-                video: {
-                    facingMode: facing,
-                    width: { ideal: 1080 },
-                    height: { ideal: 1920 }
-                },
-                audio: false
-            };
-
             try {
-                currentStream = await navigator.mediaDevices.getUserMedia(constraints);
+                currentStream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: facing, width: { ideal: 1080 }, height: { ideal: 1920 } },
+                    audio: false
+                });
                 video.srcObject = currentStream;
                 await video.play();
             } catch (err) {
-                console.warn("Erro ao carregar câmera com restrição:", err);
                 try {
                     currentStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
                     video.srcObject = currentStream;
                     await video.play();
                 } catch (e) {
-                    alert("Permita o acesso à câmera nas configurações do seu navegador!");
+                    alert("Permita o acesso à câmera no seu navegador!");
                 }
             }
         }
 
-        function switchCamera() {
+        function switchCam() {
             currentFacingMode = (currentFacingMode === 'user') ? 'environment' : 'user';
             startCamera(currentFacingMode);
         }
@@ -335,7 +288,7 @@
             }, 120);
         }
 
-        // CAPTURA DA FOTO
+        // CAPTURA DA FOTO (DESENHA NO CANVAS EM ALTA RESOLUÇÃO)
         function takePhoto() {
             const canvas = document.getElementById('photoCanvas');
             const ctx = canvas.getContext('2d');
@@ -343,10 +296,10 @@
             canvas.width = 1080;
             canvas.height = 1920;
 
-            // 1. Câmera
+            // 1. Desenha a foto da Câmera
             ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-            // 2. Fumaça Lateral Vermelha e Azul
+            // 2. Fumaça Lateral
             const gradLeft = ctx.createRadialGradient(0, 960, 50, 0, 960, 650);
             gradLeft.addColorStop(0, 'rgba(220, 38, 38, 0.55)');
             gradLeft.addColorStop(1, 'transparent');
@@ -359,56 +312,54 @@
             ctx.fillStyle = gradRight;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // 3. Moldura de Fundo da Frase
-            const badgeY = canvas.height - 470;
+            // 3. Desenha a Frase no TOPO do Canvas
+            const badgeY = 120;
             ctx.fillStyle = 'rgba(10, 10, 15, 0.85)';
             if (ctx.roundRect) {
-                ctx.roundRect(100, badgeY, 880, 100, 20);
+                ctx.roundRect(90, badgeY, 900, 110, 20);
             } else {
-                ctx.fillRect(100, badgeY, 880, 100);
+                ctx.fillRect(90, badgeY, 900, 110);
             }
             ctx.fill();
 
-            // Bordas em Gradiente no Canvas
-            const borderGrad = ctx.createLinearGradient(100, 0, 980, 0);
+            const borderGrad = ctx.createLinearGradient(90, 0, 990, 0);
             borderGrad.addColorStop(0, '#dc2626');
             borderGrad.addColorStop(1, '#2563eb');
             ctx.lineWidth = 4;
             ctx.strokeStyle = borderGrad;
             ctx.stroke();
 
-            // Texto em Gradiente Mesclado (Vermelho -> Branco -> Azul)
-            const textGrad = ctx.createLinearGradient(150, 0, 930, 0);
+            const textGrad = ctx.createLinearGradient(120, 0, 960, 0);
             textGrad.addColorStop(0, '#ff4d4d');
             textGrad.addColorStop(0.5, '#ffffff');
             textGrad.addColorStop(1, '#3b82f6');
 
-            ctx.font = '700 58px "Teko", sans-serif';
+            ctx.font = '700 62px "Teko", sans-serif';
             ctx.textAlign = 'center';
             ctx.fillStyle = textGrad;
             ctx.shadowColor = 'rgba(0, 0, 0, 0.95)';
             ctx.shadowBlur = 12;
-            ctx.fillText(badgeTexts[currentBadgeIndex], canvas.width / 2, badgeY + 68);
+            ctx.fillText(badgeTexts[currentBadgeIndex], canvas.width / 2, badgeY + 74);
 
-            // 4. Logo do CT Titã
+            // 4. Desenha a Logo do CT Titã no RODAPÉ do Canvas
             if (logoImg.complete && logoImg.naturalWidth !== 0) {
                 const logoWidth = 760;
                 const logoHeight = (logoImg.naturalHeight / logoImg.naturalWidth) * logoWidth;
-                const logoY = canvas.height - logoHeight - 80;
+                const logoY = canvas.height - logoHeight - 90;
 
                 ctx.shadowColor = 'rgba(220, 38, 38, 0.85)';
                 ctx.shadowBlur = 30;
                 ctx.shadowOffsetY = 6;
                 ctx.drawImage(logoImg, (canvas.width - logoWidth) / 2, logoY, logoWidth, logoHeight);
             } else {
-                ctx.font = '700 85px "Teko", sans-serif';
+                ctx.font = '700 95px "Teko", sans-serif';
                 ctx.fillStyle = textGrad;
                 ctx.fillText('CT TITÃ', canvas.width / 2, canvas.height - 120);
             }
 
             ctx.shadowColor = 'transparent';
 
-            // Baixar foto final PNG
+            // Baixa foto final PNG
             const link = document.createElement('a');
             link.download = `ct-tita-wod-${Date.now()}.png`;
             link.href = canvas.toDataURL('image/png');
