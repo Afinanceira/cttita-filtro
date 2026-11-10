@@ -6,7 +6,17 @@
     <title>Jogos CT Titã - Filtro Oficial</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background: #000; color: #fff; font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; overflow: hidden; }
+        body { 
+            background: #000; 
+            color: #fff; 
+            font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            min-height: 100vh; 
+            overflow: hidden; 
+        }
         
         .camera-container {
             position: relative;
@@ -14,7 +24,7 @@
             max-width: 420px;
             height: 100vh;
             max-height: 750px;
-            background: #111;
+            background: #050505;
             overflow: hidden;
             display: flex;
             align-items: center;
@@ -29,39 +39,39 @@
             z-index: 1;
         }
 
-        /* FUMAÇA NAS LATERAIS SEM BLOQUEAR O VÍDEO DA CÂMARA */
+        /* ANIMAÇÃO DE FUMAÇA NAS LATERAIS */
         .smoke-left {
             position: absolute;
-            top: 0; left: -25%;
-            width: 65%; height: 100%;
-            background: radial-gradient(circle at 10% 50%, rgba(220, 38, 38, 0.65), transparent 75%);
-            filter: blur(20px);
+            top: 0; left: -30%;
+            width: 75%; height: 100%;
+            background: radial-gradient(circle at 10% 50%, rgba(220, 38, 38, 0.6), transparent 70%);
+            filter: blur(25px);
             pointer-events: none;
             z-index: 2;
-            animation: pulseLeft 3.5s ease-in-out infinite alternate;
+            animation: pulseLeft 3s ease-in-out infinite alternate;
         }
 
         .smoke-right {
             position: absolute;
-            top: 0; right: -25%;
-            width: 65%; height: 100%;
-            background: radial-gradient(circle at 90% 50%, rgba(37, 99, 235, 0.65), transparent 75%);
-            filter: blur(20px);
+            top: 0; right: -30%;
+            width: 75%; height: 100%;
+            background: radial-gradient(circle at 90% 50%, rgba(37, 99, 235, 0.6), transparent 70%);
+            filter: blur(25px);
             pointer-events: none;
             z-index: 2;
-            animation: pulseRight 3.5s ease-in-out infinite alternate;
+            animation: pulseRight 3s ease-in-out infinite alternate;
         }
 
         @keyframes pulseLeft {
-            0% { opacity: 0.6; transform: scale(1); }
-            100% { opacity: 0.9; transform: scale(1.1); }
+            0% { opacity: 0.5; transform: scale(1); }
+            100% { opacity: 0.85; transform: scale(1.12); }
         }
         @keyframes pulseRight {
-            0% { opacity: 0.6; transform: scale(1.1); }
-            100% { opacity: 0.9; transform: scale(1); }
+            0% { opacity: 0.5; transform: scale(1.12); }
+            100% { opacity: 0.85; transform: scale(1); }
         }
 
-        /* ESTRUTURA DOS CONTEÚDOS DO RODAPÉ */
+        /* OVERLAY DOS CONTEÚDOS */
         .overlay {
             position: absolute;
             top: 0; left: 0;
@@ -72,41 +82,67 @@
             flex-direction: column;
             align-items: center;
             justify-content: flex-end;
-            padding-bottom: 100px;
+            padding-bottom: 95px;
         }
 
-        /* CONTAINER DOS BADGES/FRASES */
+        /* BADGE / FRASE ESTILIZADA */
         .badge-box {
             position: relative;
             width: 88%;
-            max-width: 340px;
+            max-width: 330px;
             margin-bottom: 15px;
+            background: rgba(0, 0, 0, 0.65);
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            border-radius: 14px;
+            padding: 10px 14px;
+            text-align: center;
+            backdrop-filter: blur(4px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.8);
+            z-index: 4;
+            transition: transform 0.2s ease;
+        }
+
+        .badge-text {
+            color: #fff;
+            font-size: 16px;
+            font-weight: 900;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.9), 0 0 10px rgba(220,38,38,0.7);
+        }
+
+        /* LOGO CT TITÃ MAIOR E EM 3D NO RODAPÉ */
+        .logo-box {
+            position: relative;
+            width: 85%;
+            max-width: 320px;
+            z-index: 4;
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 4;
         }
 
-        .badge-img {
+        .logo-3d {
             width: 100%;
+            max-width: 280px;
             height: auto;
-            object-fit: contain;
-            filter: drop-shadow(0px 4px 10px rgba(0,0,0,0.9));
+            filter: drop-shadow(0px 8px 16px rgba(0, 0, 0, 0.95))
+                    drop-shadow(0px 0px 14px rgba(220, 38, 38, 0.8))
+                    drop-shadow(0px 0px 14px rgba(37, 99, 235, 0.8));
+            transform: perspective(600px) rotateX(6deg);
         }
 
-        /* LOGO CT TITÃ BRILHANTE, MAIOR E EM DESTAKE NO RODAPÉ */
-        .logo-3d-rodape {
-            position: relative;
-            width: 82%;
-            max-width: 310px;
-            height: auto;
-            z-index: 4;
-            /* Brilho e contorno 3D sem apagar a imagem */
-            filter: drop-shadow(0px 6px 15px rgba(0, 0, 0, 0.95))
-                    drop-shadow(0px 0px 12px rgba(220, 38, 38, 0.7));
+        .logo-text-fallback {
+            background: linear-gradient(135deg, #dc2626, #2563eb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 32px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.9);
         }
 
-        /* CONTROLES DE AÇÃO NO RODAPÉ */
+        /* PAINEL DE CONTROLES NO RODAPÉ */
         .controls {
             position: absolute;
             bottom: 20px;
@@ -114,7 +150,7 @@
             display: flex;
             justify-content: space-around;
             align-items: center;
-            padding: 0 40px;
+            padding: 0 35px;
             z-index: 10;
         }
 
@@ -127,7 +163,7 @@
             font-weight: bold;
             font-size: 14px;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.8);
+            box-shadow: 0 4px 14px rgba(0,0,0,0.8);
         }
 
         .btn-capture {
@@ -141,39 +177,168 @@
             align-items: center;
             justify-content: center;
             font-size: 26px;
-            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.9);
+            box-shadow: 0 4px 18px rgba(37, 99, 235, 0.9);
         }
     </style>
 </head>
 <body>
 
     <div class="camera-container" id="captureArea">
-        <!-- Vídeo da Câmara -->
         <video id="webcam" autoplay playsinline muted></video>
 
-        <!-- Efeitos de Fumaça Animada por CSS -->
+        <!-- Fumaça Vermelha e Azul nas Laterais -->
         <div class="smoke-left"></div>
         <div class="smoke-right"></div>
 
         <div class="overlay">
-            <!-- Frase/Badge no Rodapé -->
+            <!-- Badge / Frase -->
             <div class="badge-box">
-                <img id="badgeImg" class="badge-img" src="badge_atleta.png" alt="Frase CT Titã">
+                <span id="badgeText" class="badge-text">[ ATLETA CONFIRMADO ]</span>
             </div>
             
-            <!-- Logo CT Titã Grande e Vívida no Final da Tela -->
-            <img id="logoImg" class="logo-3d-rodape" src="ct_tita_logo.png" alt="CT Titã Logo">
+            <!-- Logo CT Titã em 3D no final da tela -->
+            <div class="logo-box">
+                <img id="logoImg" class="logo-3d" src="ct_tita_logo.png" onerror="tryLoadLogo(this)" alt="CT TITÃ">
+                <span id="logoFallback" class="logo-text-fallback" style="display:none;">CT TITÃ</span>
+            </div>
         </div>
 
         <canvas id="photoCanvas" style="display: none;"></canvas>
     </div>
 
-    <!-- Botões no Rodapé -->
+    <!-- Botões -->
     <div class="controls">
         <button class="btn" onclick="nextBadge()">🔄 Mudar Frase</button>
         <button class="btn btn-capture" onclick="takePhoto()" title="Tirar Foto">📸</button>
     </div>
 
-    <script src="app.js"></script>
+    <script>
+        const badgeTexts = [
+            '[ ATLETA CONFIRMADO ]',
+            '[ SOBREVIVI AO WOD ]',
+            '[ RUMO AO PÓDIO ]',
+            '[ MODO TITÃ: ACTIVATED ]'
+        ];
+
+        let currentBadgeIndex = 0;
+        const video = document.getElementById('webcam');
+        const badgeText = document.getElementById('badgeText');
+        const logoImg = document.getElementById('logoImg');
+
+        // Tenta buscar a logo em caminhos alternativos do repositório
+        function tryLoadLogo(img) {
+            const paths = ['ativos/texturas/ct_tita_logo.png', 'ativos/ texturas/ct_tita_logo.png', 'assets/textures/ct_tita_logo.png'];
+            let idx = parseInt(img.dataset.idx || '0');
+            if (idx < paths.length) {
+                img.dataset.idx = idx + 1;
+                img.src = paths[idx];
+            } else {
+                img.style.display = 'none';
+                document.getElementById('logoFallback').style.display = 'block';
+            }
+        }
+
+        // Ativa a câmera com redundância de permissão
+        async function initCamera() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: 'user', width: { ideal: 1080 }, height: { ideal: 1920 } },
+                    audio: false
+                });
+                video.srcObject = stream;
+                await video.play();
+            } catch (err) {
+                console.warn("Retentando câmara genérica...");
+                try {
+                    const fallbackStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+                    video.srcObject = fallbackStream;
+                    await video.play();
+                } catch (e) {
+                    alert("Por favor, permita o acesso à câmara no topo do navegador para o filtro funcionar!");
+                }
+            }
+        }
+
+        function nextBadge() {
+            currentBadgeIndex = (currentBadgeIndex + 1) % badgeTexts.length;
+            badgeText.style.opacity = '0';
+            setTimeout(() => {
+                badgeText.innerText = badgeTexts[currentBadgeIndex];
+                badgeText.style.opacity = '1';
+            }, 120);
+        }
+
+        document.getElementById('captureArea').addEventListener('click', (e) => {
+            if(e.target.tagName !== 'BUTTON') {
+                nextBadge();
+            }
+        });
+
+        // TIRA A FOTO E GERA O PNG PRONTO
+        function takePhoto() {
+            const canvas = document.getElementById('photoCanvas');
+            const ctx = canvas.getContext('2d');
+
+            canvas.width = 1080;
+            canvas.height = 1920;
+
+            // 1. Câmera
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            // 2. Fumaça Lateral
+            const gradLeft = ctx.createRadialGradient(0, 960, 50, 0, 960, 650);
+            gradLeft.addColorStop(0, 'rgba(220, 38, 38, 0.55)');
+            gradLeft.addColorStop(1, 'transparent');
+            ctx.fillStyle = gradLeft;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            const gradRight = ctx.createRadialGradient(1080, 960, 50, 1080, 960, 650);
+            gradRight.addColorStop(0, 'rgba(37, 99, 235, 0.55)');
+            gradRight.addColorStop(1, 'transparent');
+            ctx.fillStyle = gradRight;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // 3. Desenha a Frase
+            const txt = badgeTexts[currentBadgeIndex];
+            ctx.font = '900 48px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.95)';
+            ctx.shadowBlur = 15;
+            
+            // Fundo da Frase no Canvas
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+            ctx.roundRect ? ctx.roundRect(140, canvas.height - 460, 800, 90, 20) : ctx.fillRect(140, canvas.height - 460, 800, 90);
+            ctx.fill();
+
+            ctx.fillStyle = '#ffffff';
+            ctx.fillText(txt, canvas.width / 2, canvas.height - 400);
+
+            // 4. Desenha a Logo 3D no Rodapé
+            if (logoImg.complete && logoImg.naturalWidth !== 0) {
+                const logoWidth = 750;
+                const logoHeight = (logoImg.naturalHeight / logoImg.naturalWidth) * logoWidth;
+                const logoY = canvas.height - logoHeight - 80;
+
+                ctx.shadowColor = 'rgba(220, 38, 38, 0.85)';
+                ctx.shadowBlur = 30;
+                ctx.shadowOffsetY = 6;
+                ctx.drawImage(logoImg, (canvas.width - logoWidth) / 2, logoY, logoWidth, logoHeight);
+            } else {
+                ctx.font = '900 75px sans-serif';
+                ctx.fillStyle = '#dc2626';
+                ctx.fillText('CT TITÃ', canvas.width / 2, canvas.height - 120);
+            }
+
+            ctx.shadowColor = 'transparent';
+
+            // Baixar foto final PNG
+            const link = document.createElement('a');
+            link.download = `ct-tita-wod-${Date.now()}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+
+        window.addEventListener('load', initCamera);
+    </script>
 </body>
 </html>
