@@ -72,7 +72,7 @@
             flex-direction: column;
             justify-content: space-between;
             align-items: center;
-            padding: 35px 15px 95px 15px;
+            padding: 35px 15px 105px 15px;
         }
 
         /* FRASE NO TOPO */
@@ -169,7 +169,6 @@
             text-shadow: 0 0 30px #dc2626, 0 0 60px #2563eb;
         }
 
-        /* AVISO FLUTUANTE COM BOTÃO DE PARTILHA */
         #toastMsg {
             position: absolute;
             top: 90px;
@@ -215,66 +214,65 @@
             gap: 6px;
         }
 
-        /* CONTROLES */
+        /* ----------------------------------------------------
+           BARRA DE CONTROLE TÉCNICA E PROFISSIONAL (DOCK FLUTUANTE)
+           ---------------------------------------------------- */
         .controls-bar {
             position: absolute;
-            bottom: 20px;
+            bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
-            width: 90%;
-            max-width: 370px;
+            width: 82%;
+            max-width: 330px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 8px 16px;
-            background: rgba(15, 15, 20, 0.85);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            border-radius: 40px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.85);
+            padding: 8px 18px;
+            background: rgba(12, 12, 18, 0.65);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 35px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.85);
             z-index: 10;
             pointer-events: auto;
         }
 
-        .btn-ctrl {
-            background: linear-gradient(135deg, #dc2626, #b91c1c);
+        /* BOTÕES SECUNDÁRIOS REFINADOS (GLASS EFFECT) */
+        .btn-icon {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
             color: #fff;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            padding: 8px 14px;
-            border-radius: 20px;
-            font-family: 'Segoe UI', sans-serif;
-            font-size: 12px;
-            font-weight: 700;
+            width: 44px; height: 44px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 17px;
             cursor: pointer;
-            display: flex; align-items: center; gap: 4px;
-            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .btn-timer {
-            background: linear-gradient(135deg, #9333ea, #7e22ce);
+        .btn-icon:active { 
+            transform: scale(0.90); 
+            background: rgba(255, 255, 255, 0.2);
         }
 
+        /* BOTÃO PRINCIPAL DE DISPARO (SHUTTER PRO) */
         .btn-shutter {
-            background: linear-gradient(135deg, #2563eb, #1d4ed8);
-            width: 58px; height: 58px;
+            background: #ffffff;
+            width: 60px; height: 60px;
             border-radius: 50%;
-            border: 3px solid #ffffff;
-            color: #fff;
+            border: 4px solid rgba(37, 99, 235, 0.9);
             display: flex; align-items: center; justify-content: center;
-            font-size: 24px; cursor: pointer;
-            box-shadow: 0 0 18px rgba(37, 99, 235, 0.8);
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 0 22px rgba(37, 99, 235, 0.5);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .btn-flip {
-            background: rgba(255, 255, 255, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            color: #fff; width: 40px; height: 40px;
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 16px; cursor: pointer;
+        .btn-shutter:active { 
+            transform: scale(0.92); 
+            background: #e2e8f0;
         }
-
-        .btn-ctrl:active, .btn-flip:active, .btn-shutter:active, .btn-share-native:active { transform: scale(0.93); }
     </style>
 </head>
 <body>
@@ -288,7 +286,6 @@
         <div id="flashEffect"></div>
         <div id="countdownOverlay"><span id="countdownNumber">3</span></div>
         
-        <!-- AVISO COM BOTÃO DE PARTILHA NATIVA -->
         <div id="toastMsg">
             <span>🔥 Foto pronta para os Stories!</span>
             <button class="btn-share-native" id="shareBtn">📤 Compartilhar Agora</button>
@@ -307,11 +304,12 @@
 
         <canvas id="photoCanvas" style="display: none;"></canvas>
 
+        <!-- DOCK DE CONTROLES PROFISSIONAL E MINIMALISTA -->
         <div class="controls-bar">
-            <button class="btn-ctrl" onclick="nextBadge()">🔄 Frase</button>
-            <button class="btn-ctrl btn-timer" onclick="startCountdown()">⏱️ 3s</button>
+            <button class="btn-icon" onclick="nextBadge()" title="Trocar Frase">🔄</button>
+            <button class="btn-icon" onclick="startCountdown()" title="Timer 3 Segundos">⏱️</button>
             <button class="btn-shutter" onclick="takePhoto()" title="Tirar Foto">📸</button>
-            <button class="btn-flip" onclick="switchCam()" title="Inverter Câmera">📷</button>
+            <button class="btn-icon" onclick="switchCam()" title="Inverter Câmera">📷</button>
         </div>
     </div>
 
@@ -408,10 +406,9 @@
             setTimeout(() => { flashEffect.style.opacity = '0'; }, 150);
 
             toastMsg.classList.add('show');
-            setTimeout(() => { toastMsg.classList.remove('show'); }, 6000); // Fica visível por 6 segundos para dar tempo de clicar
+            setTimeout(() => { toastMsg.classList.remove('show'); }, 6000);
         }
 
-        // LÓGICA DE PARTILHA NATIVA DO SMARTPHONE
         shareBtn.addEventListener('click', async () => {
             if (!lastGeneratedBlob) return;
 
@@ -425,11 +422,10 @@
                         files: [file]
                     });
                 } catch (err) {
-                    console.log('Partilha cancelada ou não concluída', err);
+                    console.log('Partilha cancelada', err);
                 }
             } else {
-                // Fallback se o navegador não suportar arquivos na share API
-                alert('O seu navegador não suporta partilha direta de arquivos. A foto foi exibida na tela.');
+                alert('O seu navegador não suporta partilha direta de arquivos.');
             }
         });
 
@@ -506,7 +502,6 @@
 
             ctx.shadowColor = 'transparent';
 
-            // Armazena a imagem em memória (Blob) para partilha nativa instantânea sem download
             canvas.toBlob((blob) => {
                 lastGeneratedBlob = blob;
             }, 'image/png');
