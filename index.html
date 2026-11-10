@@ -157,9 +157,9 @@
             top: 90px;
             left: 50%;
             transform: translateX(-50%) translateY(-25px);
-            background: rgba(15, 15, 25, 0.92);
+            background: rgba(15, 15, 25, 0.95);
             color: #fff;
-            padding: 12px 20px;
+            padding: 14px 22px;
             border-radius: 20px;
             font-family: 'Segoe UI', sans-serif;
             font-size: 13px;
@@ -172,7 +172,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             border: 1px solid rgba(255,255,255,0.25);
             text-align: center;
         }
@@ -186,7 +186,7 @@
             background: linear-gradient(135deg, #2563eb, #1d4ed8);
             color: #fff;
             border: none;
-            padding: 8px 16px;
+            padding: 8px 18px;
             border-radius: 15px;
             font-weight: bold;
             font-size: 12px;
@@ -197,9 +197,7 @@
             gap: 6px;
         }
 
-        /* ----------------------------------------------------
-           DOCK DE CONTROLE TÉCNICO (SEM EMOJIS, APENAS ÍCONES SVG)
-           ---------------------------------------------------- */
+        /* DOCK DE CONTROLE TÉCNICO (SEM EMOJIS, APENAS ÍCONES SVG) */
         .controls-bar {
             position: absolute;
             bottom: 30px;
@@ -221,7 +219,6 @@
             pointer-events: auto;
         }
 
-        /* BOTÕES SECUNDÁRIOS COM ÍCONES VETORIAIS */
         .btn-icon {
             background: rgba(255, 255, 255, 0.08);
             border: 1px solid rgba(255, 255, 255, 0.18);
@@ -249,7 +246,6 @@
             transform: rotate(180deg);
         }
 
-        /* BOTÃO PRINCIPAL DE DISPARO (SHUTTER PRO) */
         .btn-shutter {
             background: #ffffff;
             width: 62px; height: 62px;
@@ -284,8 +280,8 @@
         <div id="flashEffect"></div>
         
         <div id="toastMsg">
-            <span>🔥 Foto pronta para os Stories!</span>
-            <button class="btn-share-native" id="shareBtn">📤 Compartilhar Agora</button>
+            <span>🔥 Foto capturada com sucesso!</span>
+            <button class="btn-share-native" id="shareBtn">📤 Compartilhar nos Stories</button>
         </div>
 
         <div class="overlay">
@@ -301,21 +297,17 @@
 
         <canvas id="photoCanvas" style="display: none;"></canvas>
 
-        <!-- BARRA COM ÍCONES VETORIAIS PROFISSIONAIS E SEM TIMER -->
         <div class="controls-bar">
-            <!-- Botão Trocar Frase (Ícone de Loop/Troca SVG) -->
             <button class="btn-icon" onclick="nextBadge()" title="Trocar Frase">
                 <svg viewBox="0 0 24 24"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg>
             </button>
 
-            <!-- Botão Disparador (Ícone de Câmara SVG) -->
             <button class="btn-shutter" onclick="takePhoto()" title="Tirar Foto">
                 <svg viewBox="0 0 24 24"><path d="M12 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3zm10-3h-3.17L17 4H7L5.17 6H2v14h20V6zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/></svg>
             </button>
 
-            <!-- Botão Inverter Câmera (Ícone de Rotação SVG) -->
             <button class="btn-icon" onclick="switchCam()" title="Inverter Câmera">
-                <svg viewBox="0 0 24 24"><path d="M20 4h-3.17L15 2H9L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/></svg>
+                <svg viewBox="0 0 24 24"><path d="M20 4h-3.17L15 2H9L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5 z"/></svg>
             </button>
         </div>
     </div>
@@ -393,8 +385,10 @@
             flashEffect.style.opacity = '1';
             setTimeout(() => { flashEffect.style.opacity = '0'; }, 150);
 
+            // Pausa a câmara visualmente no momento do disparo para congelar a foto na tela
+            video.pause();
+
             toastMsg.classList.add('show');
-            setTimeout(() => { toastMsg.classList.remove('show'); }, 6000);
         }
 
         shareBtn.addEventListener('click', async () => {
@@ -415,6 +409,10 @@
             } else {
                 alert('O seu navegador não suporta partilha direta de arquivos.');
             }
+
+            // Retoma a câmara ao fechar/concluir a partilha
+            toastMsg.classList.remove('show');
+            video.play();
         });
 
         function takePhoto() {
