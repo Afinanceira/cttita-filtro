@@ -74,10 +74,11 @@
             flex-direction: column;
             justify-content: space-between;
             align-items: center;
-            padding: max(25px, env(safe-area-inset-top)) 15px max(95px, env(safe-area-inset-bottom)) 15px;
+            /* PADDING BLINDADO PARA O TOPO NÃO SUMIR NO IPHONE */
+            padding: max(45px, env(safe-area-inset-top) + 15px) 15px max(95px, env(safe-area-inset-bottom)) 15px;
         }
 
-        /* CABEÇALHO DA FRASE BLINDADO PARA APARECER SEMPRE */
+        /* FRASE NO TOPO PERFEITA */
         .badge-card {
             width: 92%;
             max-width: 380px;
@@ -105,19 +106,19 @@
             white-space: nowrap;
         }
 
-        /* LOGO CT TITÃ 3D NO RODAPÉ */
+        /* LOGO KETTLEBELLS NO RODAPÉ (TAMANHO AJUSTADO E EQUILIBRADO) */
         .logo-box {
             width: 88%;
             max-width: 330px;
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
 
         .logo-3d {
             width: 100%;
-            max-width: 290px;
+            max-width: 180px; /* Reduzido para ficar na proporção ideal */
             height: auto;
             filter: saturate(1.35) contrast(1.2)
                     drop-shadow(0px 10px 22px rgba(0, 0, 0, 0.98))
@@ -136,7 +137,7 @@
             background: linear-gradient(90deg, #ef4444 20%, #ffffff 50%, #3b82f6 80%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            font-size: 56px;
+            font-size: 40px;
             font-weight: 700;
             letter-spacing: 5px;
             text-shadow: 0 0 25px rgba(239, 68, 68, 0.9), 0 0 25px rgba(59, 130, 246, 0.9);
@@ -199,7 +200,7 @@
             gap: 6px;
         }
 
-        /* DOCK DE CONTROLE TÉCNICO UNIVERSAL */
+        /* DOCK DE CONTROLE TÉCNICO */
         .controls-bar {
             position: absolute;
             bottom: max(20px, env(safe-area-inset-bottom));
@@ -317,7 +318,7 @@
     <script>
         const badgeTexts = [
             '[ ATLETA CONFIRMADO ]',
-            '[ SOBREVIVI A PROVA ]',
+            '[ SOBREVIVI AO WOD ]',
             '[ RUMO AO PÓDIO ]',
             '[ MODO TITÃ ]'
         ];
@@ -419,10 +420,23 @@
             const canvas = document.getElementById('photoCanvas');
             const ctx = canvas.getContext('2d');
 
-            canvas.width = video.videoWidth || 1080;
-            canvas.height = video.videoHeight || 1920;
+            // RESOLUÇÃO ALTA DEFINIÇÃO PARA GARANTIR NITIDEZ ABSOLUTA AO COMPARTILHAR
+            canvas.width = 1080;
+            canvas.height = 1920;
 
-            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const vRatio = video.videoWidth / video.videoHeight;
+            const cRatio = canvas.width / canvas.height;
+            let sWidth = video.videoWidth, sHeight = video.videoHeight, sx = 0, sy = 0;
+
+            if (vRatio > cRatio) {
+                sWidth = video.videoHeight * cRatio;
+                sx = (video.videoWidth - sWidth) / 2;
+            } else {
+                sHeight = video.videoWidth / cRatio;
+                sy = (video.videoHeight - sHeight) / 2;
+            }
+
+            ctx.drawImage(video, sx, sy, sWidth, sHeight, 0, 0, canvas.width, canvas.height);
 
             const gradLeft = ctx.createRadialGradient(0, canvas.height / 2, 50, 0, canvas.height / 2, canvas.width * 0.5);
             gradLeft.addColorStop(0, 'rgba(220, 38, 38, 0.55)');
@@ -436,47 +450,47 @@
             ctx.fillStyle = gradRight;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            const badgeY = Math.round(canvas.height * 0.06);
+            const badgeY = Math.round(canvas.height * 0.055);
             const badgeH = Math.round(canvas.height * 0.055);
-            ctx.fillStyle = 'rgba(8, 8, 14, 0.88)';
+            const badgeW = Math.round(canvas.width * 0.9);
+            const badgeX = (canvas.width - badgeW) / 2;
+
+            ctx.fillStyle = 'rgba(10, 10, 18, 0.92)';
             if (ctx.roundRect) {
-                ctx.roundRect(canvas.width * 0.05, badgeY, canvas.width * 0.9, badgeH, 20);
+                ctx.roundRect(badgeX, badgeY, badgeW, badgeH, 12);
             } else {
-                ctx.fillRect(canvas.width * 0.05, badgeY, canvas.width * 0.9, badgeH);
+                ctx.fillRect(badgeX, badgeY, badgeW, badgeH);
             }
             ctx.fill();
 
-            const borderGrad = ctx.createLinearGradient(canvas.width * 0.05, 0, canvas.width * 0.95, 0);
-            borderGrad.addColorStop(0, '#dc2626');
-            borderGrad.addColorStop(1, '#2563eb');
             ctx.lineWidth = 4;
-            ctx.strokeStyle = borderGrad;
+            ctx.strokeStyle = '#dc2626';
             ctx.stroke();
 
-            const textGrad = ctx.createLinearGradient(canvas.width * 0.1, 0, canvas.width * 0.9, 0);
+            const textGrad = ctx.createLinearGradient(badgeX, 0, badgeX + badgeW, 0);
             textGrad.addColorStop(0, '#ff4d4d');
             textGrad.addColorStop(0.5, '#ffffff');
             textGrad.addColorStop(1, '#3b82f6');
 
-            const fontSize = Math.round(canvas.width * 0.055);
+            const fontSize = Math.round(canvas.width * 0.052);
             ctx.font = `700 ${fontSize}px "Teko", sans-serif`;
             ctx.textAlign = 'center';
             ctx.fillStyle = textGrad;
             ctx.shadowColor = 'rgba(0, 0, 0, 0.95)';
             ctx.shadowBlur = 12;
-            ctx.fillText(badgeTexts[currentBadgeIndex], canvas.width / 2, badgeY + (badgeH * 0.7));
+            ctx.fillText(badgeTexts[currentBadgeIndex], canvas.width / 2, badgeY + (badgeH * 0.72));
 
             if (logoImg.complete && logoImg.naturalWidth !== 0) {
-                const logoWidth = Math.round(canvas.width * 0.75);
+                const logoWidth = Math.round(canvas.width * 0.45); // Tamanho proporcional equilibrado
                 const logoHeight = (logoImg.naturalHeight / logoImg.naturalWidth) * logoWidth;
-                const logoY = canvas.height - logoHeight - Math.round(canvas.height * 0.05);
+                const logoY = canvas.height - logoHeight - Math.round(canvas.height * 0.06);
 
                 ctx.shadowColor = 'rgba(239, 68, 68, 0.95)';
-                ctx.shadowBlur = 40;
+                ctx.shadowBlur = 35;
                 ctx.shadowOffsetY = 6;
                 ctx.drawImage(logoImg, (canvas.width - logoWidth) / 2, logoY, logoWidth, logoHeight);
             } else {
-                const logoFontSize = Math.round(canvas.width * 0.095);
+                const logoFontSize = Math.round(canvas.width * 0.085);
                 ctx.font = `700 ${logoFontSize}px "Teko", sans-serif`;
                 ctx.fillStyle = textGrad;
                 ctx.shadowColor = 'rgba(239, 68, 68, 0.95)';
@@ -486,9 +500,10 @@
 
             ctx.shadowColor = 'transparent';
 
+            // GERAÇÃO DO BLOB COM QUALIDADE MÁXIMA (PNG SEM PERDA)
             canvas.toBlob((blob) => {
                 lastGeneratedBlob = blob;
-            }, 'image/png');
+            }, 'image/png', 1.0);
         }
 
         window.addEventListener('load', () => startCamera(currentFacingMode));
