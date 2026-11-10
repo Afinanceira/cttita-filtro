@@ -75,7 +75,7 @@
             padding: 35px 15px 105px 15px;
         }
 
-        /* FRASE NO TOPO */
+        /* FRASE NO TOPO NO FORMATO EXATO ORIGINAL */
         .badge-card {
             width: 92%;
             max-width: 380px;
@@ -140,7 +140,7 @@
             text-shadow: 0 0 25px rgba(239, 68, 68, 0.9), 0 0 25px rgba(59, 130, 246, 0.9);
         }
 
-        /* EFEITOS DE INTERAÇÃO */
+        /* EFEITO FLASH */
         #flashEffect {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -151,24 +151,7 @@
             transition: opacity 0.15s ease-out;
         }
 
-        #countdownOverlay {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 20;
-            display: none;
-            justify-content: center;
-            align-items: center;
-            backdrop-filter: blur(4px);
-        }
-
-        #countdownNumber {
-            font-size: 120px;
-            font-weight: 700;
-            color: #fff;
-            text-shadow: 0 0 30px #dc2626, 0 0 60px #2563eb;
-        }
-
+        /* AVISO FLUTUANTE COM BOTÃO DE PARTILHA */
         #toastMsg {
             position: absolute;
             top: 90px;
@@ -215,58 +198,73 @@
         }
 
         /* ----------------------------------------------------
-           BARRA DE CONTROLE TÉCNICA E PROFISSIONAL (DOCK FLUTUANTE)
+           DOCK DE CONTROLE TÉCNICO (SEM EMOJIS, APENAS ÍCONES SVG)
            ---------------------------------------------------- */
         .controls-bar {
             position: absolute;
             bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
-            width: 82%;
-            max-width: 330px;
+            width: 75%;
+            max-width: 310px;
             display: flex;
-            justify-content: space-between;
+            justify-content: space-around;
             align-items: center;
-            padding: 8px 18px;
-            background: rgba(12, 12, 18, 0.65);
+            padding: 10px 15px;
+            background: rgba(12, 12, 18, 0.70);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: 35px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 40px;
             box-shadow: 0 12px 40px rgba(0, 0, 0, 0.85);
             z-index: 10;
             pointer-events: auto;
         }
 
-        /* BOTÕES SECUNDÁRIOS REFINADOS (GLASS EFFECT) */
+        /* BOTÕES SECUNDÁRIOS COM ÍCONES VETORIAIS */
         .btn-icon {
             background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.18);
             color: #fff;
             width: 44px; height: 44px;
             border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
-            font-size: 17px;
             cursor: pointer;
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
+        .btn-icon svg {
+            width: 20px;
+            height: 20px;
+            fill: #ffffff;
+            transition: transform 0.3s ease;
+        }
+
         .btn-icon:active { 
             transform: scale(0.90); 
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.22);
+        }
+
+        .btn-icon:active svg {
+            transform: rotate(180deg);
         }
 
         /* BOTÃO PRINCIPAL DE DISPARO (SHUTTER PRO) */
         .btn-shutter {
             background: #ffffff;
-            width: 60px; height: 60px;
+            width: 62px; height: 62px;
             border-radius: 50%;
-            border: 4px solid rgba(37, 99, 235, 0.9);
+            border: 4px solid rgba(37, 99, 235, 0.95);
             display: flex; align-items: center; justify-content: center;
-            font-size: 24px;
             cursor: pointer;
-            box-shadow: 0 0 22px rgba(37, 99, 235, 0.5);
+            box-shadow: 0 0 24px rgba(37, 99, 235, 0.6);
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-shutter svg {
+            width: 26px;
+            height: 26px;
+            fill: #1d4ed8;
         }
 
         .btn-shutter:active { 
@@ -284,7 +282,6 @@
         <div class="smoke-right"></div>
 
         <div id="flashEffect"></div>
-        <div id="countdownOverlay"><span id="countdownNumber">3</span></div>
         
         <div id="toastMsg">
             <span>🔥 Foto pronta para os Stories!</span>
@@ -304,12 +301,22 @@
 
         <canvas id="photoCanvas" style="display: none;"></canvas>
 
-        <!-- DOCK DE CONTROLES PROFISSIONAL E MINIMALISTA -->
+        <!-- BARRA COM ÍCONES VETORIAIS PROFISSIONAIS E SEM TIMER -->
         <div class="controls-bar">
-            <button class="btn-icon" onclick="nextBadge()" title="Trocar Frase">🔄</button>
-            <button class="btn-icon" onclick="startCountdown()" title="Timer 3 Segundos">⏱️</button>
-            <button class="btn-shutter" onclick="takePhoto()" title="Tirar Foto">📸</button>
-            <button class="btn-icon" onclick="switchCam()" title="Inverter Câmera">📷</button>
+            <!-- Botão Trocar Frase (Ícone de Loop/Troca SVG) -->
+            <button class="btn-icon" onclick="nextBadge()" title="Trocar Frase">
+                <svg viewBox="0 0 24 24"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg>
+            </button>
+
+            <!-- Botão Disparador (Ícone de Câmara SVG) -->
+            <button class="btn-shutter" onclick="takePhoto()" title="Tirar Foto">
+                <svg viewBox="0 0 24 24"><path d="M12 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3zm10-3h-3.17L17 4H7L5.17 6H2v14h20V6zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/></svg>
+            </button>
+
+            <!-- Botão Inverter Câmera (Ícone de Rotação SVG) -->
+            <button class="btn-icon" onclick="switchCam()" title="Inverter Câmera">
+                <svg viewBox="0 0 24 24"><path d="M20 4h-3.17L15 2H9L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/></svg>
+            </button>
         </div>
     </div>
 
@@ -330,8 +337,6 @@
         const badgeText = document.getElementById('badgeText');
         const logoImg = document.getElementById('logoImg');
         const flashEffect = document.getElementById('flashEffect');
-        const countdownOverlay = document.getElementById('countdownOverlay');
-        const countdownNumber = document.getElementById('countdownNumber');
         const toastMsg = document.getElementById('toastMsg');
         const shareBtn = document.getElementById('shareBtn');
 
@@ -382,23 +387,6 @@
                 badgeText.innerText = badgeTexts[currentBadgeIndex];
                 badgeText.style.opacity = '1';
             }, 120);
-        }
-
-        function startCountdown() {
-            countdownOverlay.style.display = 'flex';
-            let count = 3;
-            countdownNumber.innerText = count;
-
-            const timer = setInterval(() => {
-                count--;
-                if (count > 0) {
-                    countdownNumber.innerText = count;
-                } else {
-                    clearInterval(timer);
-                    countdownOverlay.style.display = 'none';
-                    takePhoto();
-                }
-            }, 1000);
         }
 
         function triggerFlashAndToast() {
