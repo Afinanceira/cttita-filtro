@@ -75,7 +75,7 @@
             padding: 35px 15px 95px 15px;
         }
 
-        /* FRASE COMPACTA NO TOPO SEM QUEBRA DE LINHA */
+        /* FRASE NO TOPO */
         .badge-card {
             width: 92%;
             max-width: 380px;
@@ -104,10 +104,10 @@
             white-space: nowrap;
         }
 
-        /* LOGO CT TITÃ 3D VIBRANTE E DESTACADA NO RODAPÉ */
+        /* LOGO CT TITÃ SUPER ACESA E COM MÁXIMO DESTAQUE 3D NO RODAPÉ */
         .logo-box {
-            width: 85%;
-            max-width: 320px;
+            width: 88%;
+            max-width: 330px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -115,39 +115,52 @@
 
         .logo-3d {
             width: 100%;
-            max-width: 290px;
+            max-width: 300px;
             height: auto;
-            /* Efeito 3D com luzes vermelha e azul integradas */
-            filter: drop-shadow(0px 10px 20px rgba(0, 0, 0, 0.95))
-                    drop-shadow(-4px 0px 14px rgba(220, 38, 38, 0.95))
-                    drop-shadow(4px 0px 14px rgba(37, 99, 235, 0.95));
-            transform: perspective(600px) rotateX(6deg);
-            animation: logo3dGlow 3s ease-in-out infinite alternate;
+            /* Tripla camada de luzes neon e contraste para acender a logo */
+            filter: saturate(1.35) contrast(1.2)
+                    drop-shadow(0px 10px 22px rgba(0, 0, 0, 0.98))
+                    drop-shadow(-5px 0px 18px rgba(239, 68, 68, 1))
+                    drop-shadow(5px 0px 18px rgba(59, 130, 246, 1));
+            transform: perspective(600px) rotateX(4deg);
+            animation: logo3dPulse 2.8s ease-in-out infinite alternate;
         }
 
-        @keyframes logo3dGlow {
-            0% { transform: perspective(600px) rotateX(6deg) scale(1); }
-            100% { transform: perspective(600px) rotateX(6deg) scale(1.04); }
+        @keyframes logo3dPulse {
+            0% { 
+                transform: perspective(600px) rotateX(4deg) scale(1);
+                filter: saturate(1.35) contrast(1.2)
+                        drop-shadow(0px 10px 22px rgba(0, 0, 0, 0.98))
+                        drop-shadow(-5px 0px 18px rgba(239, 68, 68, 1))
+                        drop-shadow(5px 0px 18px rgba(59, 130, 246, 1));
+            }
+            100% { 
+                transform: perspective(600px) rotateX(4deg) scale(1.05);
+                filter: saturate(1.5) contrast(1.25)
+                        drop-shadow(0px 12px 25px rgba(0, 0, 0, 1))
+                        drop-shadow(-7px 0px 25px rgba(239, 68, 68, 1))
+                        drop-shadow(7px 0px 25px rgba(59, 130, 246, 1));
+            }
         }
 
         .logo-text-fallback {
-            background: linear-gradient(90deg, #dc2626 30%, #ffffff 50%, #2563eb 70%);
+            background: linear-gradient(90deg, #ef4444 20%, #ffffff 50%, #3b82f6 80%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            font-size: 52px;
+            font-size: 56px;
             font-weight: 700;
-            letter-spacing: 4px;
-            text-shadow: 0 4px 20px rgba(0,0,0,0.95);
+            letter-spacing: 5px;
+            text-shadow: 0 0 25px rgba(239, 68, 68, 0.9), 0 0 25px rgba(59, 130, 246, 0.9);
         }
 
-        /* CONTROLES CLEAN COM APENAS UM BOTÃO CENTRAL DUPLO */
+        /* CONTROLES */
         .controls-bar {
             position: absolute;
             bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
-            width: 82%;
-            max-width: 340px;
+            width: 88%;
+            max-width: 360px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -165,7 +178,7 @@
             background: linear-gradient(135deg, #dc2626, #b91c1c);
             color: #fff;
             border: 1px solid rgba(255, 255, 255, 0.3);
-            padding: 10px 18px;
+            padding: 8px 16px;
             border-radius: 20px;
             font-family: 'Segoe UI', sans-serif;
             font-size: 13px;
@@ -175,28 +188,27 @@
             box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4);
         }
 
-        /* BOTÃO PRINCIPAL ÚNICO (CLIQUE = TIRA FOTO | SEGURAR = INVERTE CÂMERA) */
-        .btn-shutter-unique {
+        .btn-shutter {
             background: linear-gradient(135deg, #2563eb, #1d4ed8);
-            width: 62px; height: 62px;
+            width: 58px; height: 58px;
             border-radius: 50%;
             border: 3px solid #ffffff;
             color: #fff;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            font-size: 22px; cursor: pointer;
-            box-shadow: 0 0 22px rgba(37, 99, 235, 0.9);
-            transition: transform 0.15s ease;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 24px; cursor: pointer;
+            box-shadow: 0 0 18px rgba(37, 99, 235, 0.8);
         }
 
-        .btn-shutter-unique:active { transform: scale(0.92); }
-
-        .btn-hint {
-            font-size: 9px;
-            font-family: 'Segoe UI', sans-serif;
-            margin-top: -2px;
-            opacity: 0.8;
-            font-weight: bold;
+        .btn-flip {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #fff; width: 42px; height: 42px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px; cursor: pointer;
         }
+
+        .btn-ctrl:active, .btn-flip:active, .btn-shutter:active { transform: scale(0.93); }
     </style>
 </head>
 <body>
@@ -208,197 +220,5 @@
         <div class="smoke-right"></div>
 
         <div class="overlay">
-            <!-- FRASE NO TOPO SEM QUEBRAS DE LINHA -->
             <div class="badge-card">
-                <span id="badgeText" class="badge-text">[ ATLETA CONFIRMADO ]</span>
-            </div>
-            
-            <!-- LOGO CT TITÃ EM 3D NO RODAPÉ -->
-            <div class="logo-box">
-                <img id="logoImg" class="logo-3d" src="ct_tita_logo.png" onerror="tryLoadLogo(this)" alt="CT TITÃ">
-                <span id="logoFallback" class="logo-text-fallback" style="display:none;">CT TITÃ</span>
-            </div>
-        </div>
-
-        <canvas id="photoCanvas" style="display: none;"></canvas>
-
-        <!-- BARRA DE CONTROLES CLEAN -->
-        <div class="controls-bar">
-            <button class="btn-ctrl" onclick="nextBadge()">🔄 Frase</button>
-            <button class="btn-shutter-unique" id="mainCamBtn" title="Toque: Tirar Foto | Segure: Inverter Câmera">
-                📸
-                <span class="btn-hint">CAM</span>
-            </button>
-        </div>
-    </div>
-
-    <script>
-        // FRASES AJUSTADAS E COMPACTAS PARA NÃO QUEBRAR
-        const badgeTexts = [
-            '[ ATLETA CONFIRMADO ]',
-            '[ SOBREVIVI AO WOD ]',
-            '[ RUMO AO PÓDIO ]',
-            '[ MODO TITÃ ]'
-        ];
-
-        let currentBadgeIndex = 0;
-        let currentFacingMode = 'user';
-        let currentStream = null;
-        let pressTimer = null;
-
-        const video = document.getElementById('webcam');
-        const badgeText = document.getElementById('badgeText');
-        const logoImg = document.getElementById('logoImg');
-        const mainBtn = document.getElementById('mainCamBtn');
-
-        function tryLoadLogo(img) {
-            const paths = ['ativos/texturas/ct_tita_logo.png', 'ativos/ texturas/ct_tita_logo.png', 'assets/textures/ct_tita_logo.png'];
-            let idx = parseInt(img.dataset.idx || '0');
-            if (idx < paths.length) {
-                img.dataset.idx = idx + 1;
-                img.src = paths[idx];
-            } else {
-                img.style.display = 'none';
-                document.getElementById('logoFallback').style.display = 'block';
-            }
-        }
-
-        async function startCamera(facing) {
-            if (currentStream) {
-                currentStream.getTracks().forEach(track => track.stop());
-            }
-
-            try {
-                currentStream = await navigator.mediaDevices.getUserMedia({
-                    video: { facingMode: facing, width: { ideal: 1080 }, height: { ideal: 1920 } },
-                    audio: false
-                });
-                video.srcObject = currentStream;
-                await video.play();
-            } catch (err) {
-                try {
-                    currentStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
-                    video.srcObject = currentStream;
-                    await video.play();
-                } catch (e) {
-                    alert("Permita o acesso à câmera no seu navegador!");
-                }
-            }
-        }
-
-        function switchCam() {
-            currentFacingMode = (currentFacingMode === 'user') ? 'environment' : 'user';
-            startCamera(currentFacingMode);
-        }
-
-        // LÓGICA DO BOTÃO ÚNICO: CLIQUE TIRA FOTO, SEGURAR TROCA A CÂMERA
-        mainBtn.addEventListener('mousedown', startPress);
-        mainBtn.addEventListener('touchstart', startPress);
-        mainBtn.addEventListener('mouseup', endPress);
-        mainBtn.addEventListener('touchend', endPress);
-
-        let isLongPress = false;
-
-        function startPress(e) {
-            isLongPress = false;
-            pressTimer = setTimeout(() => {
-                isLongPress = true;
-                switchCam();
-            }, 750); // Segurar por 0.75s inverte a câmera
-        }
-
-        function endPress(e) {
-            clearTimeout(pressTimer);
-            if (!isLongPress) {
-                takePhoto();
-            }
-        }
-
-        function nextBadge() {
-            currentBadgeIndex = (currentBadgeIndex + 1) % badgeTexts.length;
-            badgeText.style.opacity = '0';
-            setTimeout(() => {
-                badgeText.innerText = badgeTexts[currentBadgeIndex];
-                badgeText.style.opacity = '1';
-            }, 120);
-        }
-
-        // CAPTURA DA FOTO PNG
-        function takePhoto() {
-            const canvas = document.getElementById('photoCanvas');
-            const ctx = canvas.getContext('2d');
-
-            canvas.width = 1080;
-            canvas.height = 1920;
-
-            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-            const gradLeft = ctx.createRadialGradient(0, 960, 50, 0, 960, 650);
-            gradLeft.addColorStop(0, 'rgba(220, 38, 38, 0.55)');
-            gradLeft.addColorStop(1, 'transparent');
-            ctx.fillStyle = gradLeft;
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            const gradRight = ctx.createRadialGradient(1080, 960, 50, 1080, 960, 650);
-            gradRight.addColorStop(0, 'rgba(37, 99, 235, 0.55)');
-            gradRight.addColorStop(1, 'transparent');
-            ctx.fillStyle = gradRight;
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            // Frase no Topo do Canvas
-            const badgeY = 110;
-            ctx.fillStyle = 'rgba(8, 8, 14, 0.88)';
-            if (ctx.roundRect) {
-                ctx.roundRect(90, badgeY, 900, 105, 20);
-            } else {
-                ctx.fillRect(90, badgeY, 900, 105);
-            }
-            ctx.fill();
-
-            const borderGrad = ctx.createLinearGradient(90, 0, 990, 0);
-            borderGrad.addColorStop(0, '#dc2626');
-            borderGrad.addColorStop(1, '#2563eb');
-            ctx.lineWidth = 4;
-            ctx.strokeStyle = borderGrad;
-            ctx.stroke();
-
-            const textGrad = ctx.createLinearGradient(120, 0, 960, 0);
-            textGrad.addColorStop(0, '#ff4d4d');
-            textGrad.addColorStop(0.5, '#ffffff');
-            textGrad.addColorStop(1, '#3b82f6');
-
-            ctx.font = '700 60px "Teko", sans-serif';
-            ctx.textAlign = 'center';
-            ctx.fillStyle = textGrad;
-            ctx.shadowColor = 'rgba(0, 0, 0, 0.95)';
-            ctx.shadowBlur = 12;
-            ctx.fillText(badgeTexts[currentBadgeIndex], canvas.width / 2, badgeY + 70);
-
-            // Logo CT Titã 3D no Rodapé do Canvas
-            if (logoImg.complete && logoImg.naturalWidth !== 0) {
-                const logoWidth = 780;
-                const logoHeight = (logoImg.naturalHeight / logoImg.naturalWidth) * logoWidth;
-                const logoY = canvas.height - logoHeight - 90;
-
-                ctx.shadowColor = 'rgba(220, 38, 38, 0.95)';
-                ctx.shadowBlur = 35;
-                ctx.shadowOffsetY = 6;
-                ctx.drawImage(logoImg, (canvas.width - logoWidth) / 2, logoY, logoWidth, logoHeight);
-            } else {
-                ctx.font = '700 95px "Teko", sans-serif';
-                ctx.fillStyle = textGrad;
-                ctx.fillText('CT TITÃ', canvas.width / 2, canvas.height - 120);
-            }
-
-            ctx.shadowColor = 'transparent';
-
-            const link = document.createElement('a');
-            link.download = `ct-tita-wod-${Date.now()}.png`;
-            link.href = canvas.toDataURL('image/png');
-            link.click();
-        }
-
-        window.addEventListener('load', () => startCamera(currentFacingMode));
-    </script>
-</body>
-</html>
+                <span id="
