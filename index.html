@@ -4,12 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Jogos CT Titã - Filtro Oficial</title>
+    <link href="https://fonts.googleapis.com/css2?family=Teko:wght@700&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { 
             background: #000; 
             color: #fff; 
-            font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif; 
+            font-family: 'Teko', 'Segoe UI', sans-serif; 
             display: flex; 
             flex-direction: column; 
             align-items: center; 
@@ -21,9 +22,9 @@
         .camera-container {
             position: relative;
             width: 100vw;
-            max-width: 420px;
+            max-width: 430px;
             height: 100vh;
-            max-height: 750px;
+            max-height: 800px;
             background: #050505;
             overflow: hidden;
             display: flex;
@@ -39,39 +40,39 @@
             z-index: 1;
         }
 
-        /* ANIMAÇÃO DE FUMAÇA NAS LATERAIS */
+        /* ANIMAÇÃO DE FUMAÇA AZUL E VERMELHA NAS LATERAIS */
         .smoke-left {
             position: absolute;
             top: 0; left: -30%;
-            width: 75%; height: 100%;
-            background: radial-gradient(circle at 10% 50%, rgba(220, 38, 38, 0.6), transparent 70%);
-            filter: blur(25px);
+            width: 70%; height: 100%;
+            background: radial-gradient(circle at 10% 50%, rgba(220, 38, 38, 0.65), transparent 70%);
+            filter: blur(30px);
             pointer-events: none;
             z-index: 2;
-            animation: pulseLeft 3s ease-in-out infinite alternate;
+            animation: pulseLeft 3.5s ease-in-out infinite alternate;
         }
 
         .smoke-right {
             position: absolute;
             top: 0; right: -30%;
-            width: 75%; height: 100%;
-            background: radial-gradient(circle at 90% 50%, rgba(37, 99, 235, 0.6), transparent 70%);
-            filter: blur(25px);
+            width: 70%; height: 100%;
+            background: radial-gradient(circle at 90% 50%, rgba(37, 99, 235, 0.65), transparent 70%);
+            filter: blur(30px);
             pointer-events: none;
             z-index: 2;
-            animation: pulseRight 3s ease-in-out infinite alternate;
+            animation: pulseRight 3.5s ease-in-out infinite alternate;
         }
 
         @keyframes pulseLeft {
-            0% { opacity: 0.5; transform: scale(1); }
-            100% { opacity: 0.85; transform: scale(1.12); }
+            0% { opacity: 0.55; transform: scale(1); }
+            100% { opacity: 0.9; transform: scale(1.1); }
         }
         @keyframes pulseRight {
-            0% { opacity: 0.5; transform: scale(1.12); }
-            100% { opacity: 0.85; transform: scale(1); }
+            0% { opacity: 0.55; transform: scale(1.1); }
+            100% { opacity: 0.9; transform: scale(1); }
         }
 
-        /* OVERLAY DOS CONTEÚDOS */
+        /* OVERLAY DOS ELEMENTOS VISUAIS */
         .overlay {
             position: absolute;
             top: 0; left: 0;
@@ -82,36 +83,39 @@
             flex-direction: column;
             align-items: center;
             justify-content: flex-end;
-            padding-bottom: 95px;
+            padding-bottom: 110px;
         }
 
-        /* BADGE / FRASE ESTILIZADA */
+        /* BADGE / FRASE EM AZUL E VERMELHO GRADIENTE */
         .badge-box {
             position: relative;
-            width: 88%;
-            max-width: 330px;
-            margin-bottom: 15px;
-            background: rgba(0, 0, 0, 0.65);
-            border: 2px solid rgba(255, 255, 255, 0.8);
-            border-radius: 14px;
-            padding: 10px 14px;
+            width: 90%;
+            max-width: 350px;
+            margin-bottom: 12px;
+            background: rgba(10, 10, 15, 0.75);
+            border: 2px solid;
+            border-image: linear-gradient(90deg, #dc2626, #2563eb) 1;
+            border-radius: 12px;
+            padding: 8px 16px;
             text-align: center;
-            backdrop-filter: blur(4px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.8);
+            backdrop-filter: blur(8px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.9);
             z-index: 4;
-            transition: transform 0.2s ease;
+            transition: opacity 0.2s ease, transform 0.2s ease;
         }
 
         .badge-text {
-            color: #fff;
-            font-size: 16px;
-            font-weight: 900;
-            letter-spacing: 1.2px;
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 2px;
             text-transform: uppercase;
-            text-shadow: 0 2px 6px rgba(0,0,0,0.9), 0 0 10px rgba(220,38,38,0.7);
+            background: linear-gradient(90deg, #ff4d4d 0%, #ffffff 50%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.9));
         }
 
-        /* LOGO CT TITÃ MAIOR E EM 3D NO RODAPÉ */
+        /* LOGO CT TITÃ NO RODAPÉ */
         .logo-box {
             position: relative;
             width: 85%;
@@ -124,60 +128,97 @@
 
         .logo-3d {
             width: 100%;
-            max-width: 280px;
+            max-width: 270px;
             height: auto;
-            filter: drop-shadow(0px 8px 16px rgba(0, 0, 0, 0.95))
-                    drop-shadow(0px 0px 14px rgba(220, 38, 38, 0.8))
-                    drop-shadow(0px 0px 14px rgba(37, 99, 235, 0.8));
-            transform: perspective(600px) rotateX(6deg);
+            filter: drop-shadow(0px 8px 20px rgba(0, 0, 0, 0.95))
+                    drop-shadow(-2px 0px 10px rgba(220, 38, 38, 0.75))
+                    drop-shadow(2px 0px 10px rgba(37, 99, 235, 0.75));
         }
 
         .logo-text-fallback {
-            background: linear-gradient(135deg, #dc2626, #2563eb);
+            background: linear-gradient(90deg, #dc2626 30%, #2563eb 70%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            font-size: 32px;
-            font-weight: 900;
-            letter-spacing: 2px;
-            text-shadow: 0 4px 10px rgba(0,0,0,0.9);
+            font-size: 42px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-shadow: 0 4px 12px rgba(0,0,0,0.9);
         }
 
-        /* PAINEL DE CONTROLES NO RODAPÉ */
-        .controls {
+        /* BARRA DE CONTROLES ELEGANTE (GLASSMORPHISM) */
+        .controls-bar {
             position: absolute;
-            bottom: 20px;
-            width: 100%;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 380px;
             display: flex;
-            justify-content: space-around;
+            justify-content: space-between;
             align-items: center;
-            padding: 0 35px;
+            padding: 10px 20px;
+            background: rgba(15, 15, 20, 0.75);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
             z-index: 10;
         }
 
-        .btn {
-            background: #dc2626;
+        .btn-action {
+            background: linear-gradient(135deg, rgba(220, 38, 38, 0.9), rgba(185, 28, 28, 0.9));
             color: #fff;
-            border: 2px solid #fff;
-            padding: 12px 22px;
-            border-radius: 30px;
-            font-weight: bold;
-            font-size: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            padding: 10px 18px;
+            border-radius: 25px;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
             cursor: pointer;
-            box-shadow: 0 4px 14px rgba(0,0,0,0.8);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4);
+            transition: all 0.2s ease;
         }
 
-        .btn-capture {
-            background: #2563eb;
-            width: 65px;
-            height: 65px;
+        .btn-action:active {
+            transform: scale(0.95);
+        }
+
+        .btn-flip {
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #fff;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
-            border: 3px solid #fff;
-            padding: 0;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 26px;
-            box-shadow: 0 4px 18px rgba(37, 99, 235, 0.9);
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-capture-main {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            width: 62px;
+            height: 62px;
+            border-radius: 50%;
+            border: 3px solid #ffffff;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(37, 99, 235, 0.7);
+            transition: all 0.2s ease;
+        }
+
+        .btn-capture-main:active {
+            transform: scale(0.92);
         }
     </style>
 </head>
@@ -186,12 +227,12 @@
     <div class="camera-container" id="captureArea">
         <video id="webcam" autoplay playsinline muted></video>
 
-        <!-- Fumaça Vermelha e Azul nas Laterais -->
+        <!-- Fumaça Vermelha e Azul -->
         <div class="smoke-left"></div>
         <div class="smoke-right"></div>
 
         <div class="overlay">
-            <!-- Badge / Frase -->
+            <!-- Badge / Frase Estilizada com Mescla Vermelho e Azul -->
             <div class="badge-box">
                 <span id="badgeText" class="badge-text">[ ATLETA CONFIRMADO ]</span>
             </div>
@@ -206,10 +247,19 @@
         <canvas id="photoCanvas" style="display: none;"></canvas>
     </div>
 
-    <!-- Botões -->
-    <div class="controls">
-        <button class="btn" onclick="nextBadge()">🔄 Mudar Frase</button>
-        <button class="btn btn-capture" onclick="takePhoto()" title="Tirar Foto">📸</button>
+    <!-- Barra Flutuante de Ações Profissional -->
+    <div class="controls-bar">
+        <button class="btn-action" onclick="nextBadge()">
+            <span>🔄</span> Frase
+        </button>
+
+        <button class="btn-capture-main" onclick="takePhoto()" title="Tirar Foto">
+            📸
+        </button>
+
+        <button class="btn-flip" onclick="switchCamera()" title="Inverter Câmera">
+            📷
+        </button>
     </div>
 
     <script>
@@ -221,11 +271,13 @@
         ];
 
         let currentBadgeIndex = 0;
+        let currentFacingMode = 'user'; // 'user' para frontal, 'environment' para traseira
+        let currentStream = null;
+
         const video = document.getElementById('webcam');
         const badgeText = document.getElementById('badgeText');
         const logoImg = document.getElementById('logoImg');
 
-        // Tenta buscar a logo em caminhos alternativos do repositório
         function tryLoadLogo(img) {
             const paths = ['ativos/texturas/ct_tita_logo.png', 'ativos/ texturas/ct_tita_logo.png', 'assets/textures/ct_tita_logo.png'];
             let idx = parseInt(img.dataset.idx || '0');
@@ -238,25 +290,40 @@
             }
         }
 
-        // Ativa a câmera com redundância de permissão
-        async function initCamera() {
+        // Inicializa a câmera sem zoom forçado
+        async function startCamera(facing) {
+            if (currentStream) {
+                currentStream.getTracks().forEach(track => track.stop());
+            }
+
+            const constraints = {
+                video: {
+                    facingMode: facing,
+                    width: { ideal: 1080 },
+                    height: { ideal: 1920 }
+                },
+                audio: false
+            };
+
             try {
-                const stream = await navigator.mediaDevices.getUserMedia({
-                    video: { facingMode: 'user', width: { ideal: 1080 }, height: { ideal: 1920 } },
-                    audio: false
-                });
-                video.srcObject = stream;
+                currentStream = await navigator.mediaDevices.getUserMedia(constraints);
+                video.srcObject = currentStream;
                 await video.play();
             } catch (err) {
-                console.warn("Retentando câmara genérica...");
+                console.warn("Erro ao carregar câmera com restrição:", err);
                 try {
-                    const fallbackStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
-                    video.srcObject = fallbackStream;
+                    currentStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+                    video.srcObject = currentStream;
                     await video.play();
                 } catch (e) {
-                    alert("Por favor, permita o acesso à câmara no topo do navegador para o filtro funcionar!");
+                    alert("Permita o acesso à câmera nas configurações do seu navegador!");
                 }
             }
+        }
+
+        function switchCamera() {
+            currentFacingMode = (currentFacingMode === 'user') ? 'environment' : 'user';
+            startCamera(currentFacingMode);
         }
 
         function nextBadge() {
@@ -268,13 +335,7 @@
             }, 120);
         }
 
-        document.getElementById('captureArea').addEventListener('click', (e) => {
-            if(e.target.tagName !== 'BUTTON') {
-                nextBadge();
-            }
-        });
-
-        // TIRA A FOTO E GERA O PNG PRONTO
+        // CAPTURA DA FOTO
         function takePhoto() {
             const canvas = document.getElementById('photoCanvas');
             const ctx = canvas.getContext('2d');
@@ -285,7 +346,7 @@
             // 1. Câmera
             ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-            // 2. Fumaça Lateral
+            // 2. Fumaça Lateral Vermelha e Azul
             const gradLeft = ctx.createRadialGradient(0, 960, 50, 0, 960, 650);
             gradLeft.addColorStop(0, 'rgba(220, 38, 38, 0.55)');
             gradLeft.addColorStop(1, 'transparent');
@@ -298,24 +359,40 @@
             ctx.fillStyle = gradRight;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // 3. Desenha a Frase
-            const txt = badgeTexts[currentBadgeIndex];
-            ctx.font = '900 48px sans-serif';
-            ctx.textAlign = 'center';
-            ctx.shadowColor = 'rgba(0, 0, 0, 0.95)';
-            ctx.shadowBlur = 15;
-            
-            // Fundo da Frase no Canvas
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-            ctx.roundRect ? ctx.roundRect(140, canvas.height - 460, 800, 90, 20) : ctx.fillRect(140, canvas.height - 460, 800, 90);
+            // 3. Moldura de Fundo da Frase
+            const badgeY = canvas.height - 470;
+            ctx.fillStyle = 'rgba(10, 10, 15, 0.85)';
+            if (ctx.roundRect) {
+                ctx.roundRect(100, badgeY, 880, 100, 20);
+            } else {
+                ctx.fillRect(100, badgeY, 880, 100);
+            }
             ctx.fill();
 
-            ctx.fillStyle = '#ffffff';
-            ctx.fillText(txt, canvas.width / 2, canvas.height - 400);
+            // Bordas em Gradiente no Canvas
+            const borderGrad = ctx.createLinearGradient(100, 0, 980, 0);
+            borderGrad.addColorStop(0, '#dc2626');
+            borderGrad.addColorStop(1, '#2563eb');
+            ctx.lineWidth = 4;
+            ctx.strokeStyle = borderGrad;
+            ctx.stroke();
 
-            // 4. Desenha a Logo 3D no Rodapé
+            // Texto em Gradiente Mesclado (Vermelho -> Branco -> Azul)
+            const textGrad = ctx.createLinearGradient(150, 0, 930, 0);
+            textGrad.addColorStop(0, '#ff4d4d');
+            textGrad.addColorStop(0.5, '#ffffff');
+            textGrad.addColorStop(1, '#3b82f6');
+
+            ctx.font = '700 58px "Teko", sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillStyle = textGrad;
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.95)';
+            ctx.shadowBlur = 12;
+            ctx.fillText(badgeTexts[currentBadgeIndex], canvas.width / 2, badgeY + 68);
+
+            // 4. Logo do CT Titã
             if (logoImg.complete && logoImg.naturalWidth !== 0) {
-                const logoWidth = 750;
+                const logoWidth = 760;
                 const logoHeight = (logoImg.naturalHeight / logoImg.naturalWidth) * logoWidth;
                 const logoY = canvas.height - logoHeight - 80;
 
@@ -324,8 +401,8 @@
                 ctx.shadowOffsetY = 6;
                 ctx.drawImage(logoImg, (canvas.width - logoWidth) / 2, logoY, logoWidth, logoHeight);
             } else {
-                ctx.font = '900 75px sans-serif';
-                ctx.fillStyle = '#dc2626';
+                ctx.font = '700 85px "Teko", sans-serif';
+                ctx.fillStyle = textGrad;
                 ctx.fillText('CT TITÃ', canvas.width / 2, canvas.height - 120);
             }
 
@@ -338,7 +415,7 @@
             link.click();
         }
 
-        window.addEventListener('load', initCamera);
+        window.addEventListener('load', () => startCamera(currentFacingMode));
     </script>
 </body>
 </html>
