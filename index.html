@@ -8,7 +8,6 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { background: #111; color: #fff; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; overflow: hidden; }
         
-        /* Container principal com proporção 9:16 de Stories */
         .camera-container {
             position: relative;
             width: 100vw;
@@ -29,7 +28,6 @@
             object-fit: cover;
         }
 
-        /* Camadas de Overlay (Moldura e Logo) */
         .overlay {
             position: absolute;
             top: 0; left: 0;
@@ -41,7 +39,7 @@
             position: absolute;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            mix-blend-mode: multiply; /* Faz o fundo branco da fumaça desaparecer! */
+            mix-blend-mode: multiply;
             object-fit: cover;
         }
 
@@ -64,7 +62,6 @@
             transition: transform 0.2s ease, opacity 0.2s ease;
         }
 
-        /* Controles flutuantes no rodapé */
         .controls {
             position: absolute;
             bottom: 20px;
@@ -104,26 +101,22 @@
 <body>
 
     <div class="camera-container" id="captureArea">
-        <!-- Vídeo da Câmara -->
         <video id="webcam" autoplay playsinline muted></video>
 
-        <!-- Camadas de sobreposição -->
         <div class="overlay">
-            <img src="assets/textures/smoke_frame.png" class="smoke-frame" alt="Fumaça">
-            <img src="assets/textures/ct_tita_logo.png" class="logo-header" alt="CT Titã">
-            <img id="badgeImg" src="assets/textures/badge_atleta.png" class="badge-footer" alt="Badge">
+            <img src="assets/textures/smoke_frame.png" onerror="this.src='ativos/texturas/smoke_frame.png'" class="smoke-frame" alt="Fumaça">
+            <img src="assets/textures/ct_tita_logo.png" onerror="this.src='ativos/texturas/ct_tita_logo.png'" class="logo-header" alt="CT Titã">
+            <img id="badgeImg" src="assets/textures/badge_atleta.png" onerror="this.src='ativos/texturas/badge_atleta.png'" class="badge-footer" alt="Badge">
         </div>
 
-        <!-- Canvas invisível para renderizar a foto final -->
         <canvas id="photoCanvas" style="display: none;"></canvas>
     </div>
 
-    <!-- Botões de Ação -->
     <div class="controls">
         <button class="btn" onclick="nextBadge()">🔄 Mudar Badge</button>
         <button class="btn btn-capture" onclick="takePhoto()">📸</button>
     </div>
 
-    <script src="scripts/app.js"></script>
+    <script src="scripts/app.js" onerror="this.src='roteiros/app.js'"></script>
 </body>
 </html>
