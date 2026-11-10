@@ -1,4 +1,3 @@
-// Lista dos 4 Badges configurados na pasta assets/textures/
 const badges = [
     'assets/textures/badge_atleta.png',
     'assets/textures/badge_sobrevivi.png',
@@ -6,9 +5,16 @@ const badges = [
     'assets/textures/badge_modo_tita.png'
 ];
 
-let currentBadgeIndex = 0;
+// Fallback de caminhos caso o GitHub tenha mantido a pasta traduzida como "ativos/texturas"
+const badgesFallback = [
+    'ativos/texturas/badge_atleta.png',
+    'ativos/texturas/badge_sobrevivi.png',
+    'ativos/texturas/badge_podio.png',
+    'ativos/texturas/badge_modo_tita.png'
+];
 
-// Inicializa a Câmara do Telemóvel/PC
+let currentBadgeIndex = 0;
+let useFallback = false;
 const video = document.getElementById('webcam');
 
 async function initCamera() {
@@ -19,70 +25,89 @@ async function initCamera() {
         });
         video.srcObject = stream;
     } catch (err) {
-        alert("Por favor, permita o acesso à câmara para usar o filtro do CT Titã!");
-        console.error("Erro na câmara:", err);
+        alert("Por favor, permita o acesso à câmera para usar o filtro do CT Titã!");
+        console.error("Erro na câmera:", err);
     }
 }
 
-// Função para alternar os Badges ao clicar no botão ou tocar no ecrã
 function nextBadge() {
     currentBadgeIndex = (currentBadgeIndex + 1) % badges.length;
     const badgeImg = document.getElementById('badgeImg');
     badgeImg.style.opacity = '0';
+    
     setTimeout(() => {
-        badgeImg.src = badges[currentBadgeIndex];
+        const list = useFallback ? badgesFallback : badges;
+        badgeImg.src = list[currentBadgeIndex];
         badgeImg.style.opacity = '1';
     }, 150);
 }
 
-// Permite tocar na área da câmara para trocar o badge também!
+// Verifica erro no carregamento inicial para ativar o fallback da pasta
+document.getElementById('badgeImg').addEventListener('error', function() {
+    useFallback = true;
+    this.src = badgesFallback[currentBadgeIndex];
+});
+
 document.getElementById('captureArea').addEventListener('click', (e) => {
     if(e.target.tagName !== 'BUTTON') {
         nextBadge();
     }
 });
 
-// Captura a foto juntando a câmara + logo + fumaça + badge num único ficheiro PNG
 function takePhoto() {
     const canvas = document.getElementById('photoCanvas');
     const ctx = canvas.getContext('2d');
 
-    // Define a resolução de Stories (1080x1920)
     canvas.width = 1080;
     canvas.height = 1920;
 
-    // 1. Desenha a foto da câmara
+    // 1. Desenha a foto da câmera
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-    // Carrega e desenha os overlays na imagem final
     const smoke = new Image();
     const logo = new Image();
     const badge = new Image();
 
-    smoke.src = 'assets/textures/smoke_frame.png';
-    logo.src = 'assets/textures/ct_tita_logo.png';
-    badge.src = badges[currentBadgeIndex];
+    const basePath = useFallback ? 'ativos/texturas/' : 'assets/textures/';
+
+    smoke.src = basePath + 'smoke_frame.png';
+    logo.src = basePath + 'ct_tita_logo.png';
+    badge.src = useFallback ? badgesFallback[currentBadgeIndex] : badges[currentBadgeIndex];
 
     let loadedCount = 0;
-    const totalImages = 3;
 
     function renderFinalImage() {
         loadedCount++;
-        if (loadedCount === totalImages) {
-            // Desenha fumaça, logo e badge no canvas final
+        if (loadedCount === 3) {
+            // 2. Desenha a Fumaça cobrindo a tela inteira
+            ctx.globalAlpha = 0.85;
             ctx.drawImage(smoke, 0, 0, canvas.width, canvas.height);
+            ctx.globalAlpha = 1.0;
             
-            // Desenha logo no topo
-            const logoWidth = 500;
-            const logoHeight = (logo.height / logo.width) * logoWidth;
-            ctx.drawImage(logo, (canvas.width - logoWidth) / 2, 80, logoWidth, logoHeight);
-
-            // Desenha badge no rodapé
-            const badgeWidth = 800;
+            // 3. Desenha o Badge/Frase centralizado acima da logo
+            const badgeWidth = 850;
             const badgeHeight = (badge.height / badge.width) * badgeWidth;
-            ctx.drawImage(badge, (canvas.width - badgeWidth) / 2, canvas.height - 250, badgeWidth, badgeHeight);
+            const badgeY = canvas.height - 480;
+            
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.9)';
+            ctx.shadowBlur = 20;
+            ctx.drawImage(badge, (canvas.width - badgeWidth) / 2, badgeY, badgeWidth, badgeHeight);
 
-            // Faz o download automático da foto para o telemóvel do atleta
+            // 4. Desenha a Logo do CT Titã MAIOR, em 3D (com sombras em camadas) no FINAL DA TELA
+            const logoWidth = 750;
+            const logoHeight = (logo.height / logo.width) * logoWidth;
+            const logoY = canvas.height - logoHeight - 60;
+
+            // Sombra vermelha e preta para dar o efeito 3D exaltado
+            ctx.shadowColor = 'rgba(220, 38, 38, 0.7)';
+            ctx.shadowBlur = 30;
+            ctx.shadowOffsetY = 10;
+            ctx.drawImage(logo, (canvas.width - logoWidth) / 2, logoY, logoWidth, logoHeight);
+
+            // Reseta a sombra
+            ctx.shadowColor = 'transparent';
+
+            // 5. Baixa a foto pronta em PNG
             const link = document.createElement('a');
             link.download = `ct-tita-wod-${Date.now()}.png`;
             link.href = canvas.toDataURL('image/png');
@@ -95,5 +120,4 @@ function takePhoto() {
     badge.onload = renderFinalImage;
 }
 
-// Inicia a câmara assim que a página carrega
 window.addEventListener('load', initCamera);
