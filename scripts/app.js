@@ -1,23 +1,26 @@
+// Lista priorizando a pasta que está no repositório do GitHub
 const badges = [
-    'assets/textures/badge_atleta.png',
-    'assets/textures/badge_sobrevivi.png',
-    'assets/textures/badge_podio.png',
-    'assets/textures/badge_modo_tita.png'
-];
-
-const badgesFallback = [
     'ativos/texturas/badge_atleta.png',
     'ativos/texturas/badge_sobrevivi.png',
     'ativos/texturas/badge_podio.png',
     'ativos/texturas/badge_modo_tita.png'
 ];
 
-let currentBadgeIndex = 0;
-let useFallback = false;
-let mediaRecorder;
-let recordedChunks = [];
-let isRecording = false;
+const badgesFallback = [
+    'assets/textures/badge_atleta.png',
+    'assets/textures/badge_sobrevivi.png',
+    'assets/textures/badge_podio.png',
+    'assets/textures/badge_modo_tita.png'
+];
 
+const badgeTexts = [
+    '[ ATLETA CONFIRMADO ]',
+    '[ SOBREVIVI AO WOD ]',
+    '[ RUMO AO PÓDIO ]',
+    '[ MODO TITÃ: ACTIVATED ]'
+];
+
+let currentBadgeIndex = 0;
 const video = document.getElementById('webcam');
 
 async function initCamera() {
@@ -28,7 +31,7 @@ async function initCamera() {
         });
         video.srcObject = stream;
     } catch (err) {
-        alert("Por favor, permita a câmera no navegador para aceder ao filtro!");
+        alert("Por favor, permita a câmera no navegador para usar o filtro!");
         console.error("Erro câmera:", err);
     }
 }
@@ -36,18 +39,33 @@ async function initCamera() {
 function nextBadge() {
     currentBadgeIndex = (currentBadgeIndex + 1) % badges.length;
     const badgeImg = document.getElementById('badgeImg');
+    const badgeFallback = document.getElementById('badgeFallback');
+    
     badgeImg.style.opacity = '0';
     
     setTimeout(() => {
-        const list = useFallback ? badgesFallback : badges;
-        badgeImg.src = list[currentBadgeIndex];
+        badgeImg.src = badges[currentBadgeIndex];
+        badgeFallback.innerText = badgeTexts[currentBadgeIndex];
         badgeImg.style.opacity = '1';
     }, 120);
 }
 
+// Tratamento caso a imagem PNG falhe ao carregar
 document.getElementById('badgeImg').addEventListener('error', function() {
-    useFallback = true;
-    this.src = badgesFallback[currentBadgeIndex];
+    // Tenta primeiro a pasta fallback alternativa assets/textures/
+    if (!this.dataset.retried) {
+        this.dataset.retried = 'true';
+        this.src = badgesFallback[currentBadgeIndex];
+    } else {
+        // Se ambos falharem, exibe o banner de texto estilizado
+        this.style.display = 'none';
+        document.getElementById('badgeFallback').style.display = 'block';
+    }
+});
+
+document.getElementById('badgeImg').addEventListener('load', function() {
+    this.style.display = 'block';
+    document.getElementById('badgeFallback').style.display = 'none';
 });
 
 document.getElementById('captureArea').addEventListener('click', (e) => {
@@ -56,7 +74,7 @@ document.getElementById('captureArea').addEventListener('click', (e) => {
     }
 });
 
-// FOTO ESTÁTICA COM SOMBRA 3D E LOGO NO RODAPÉ
+// CAPTURA DA FOTO EM PNG
 function takePhoto() {
     const canvas = document.getElementById('photoCanvas');
     const ctx = canvas.getContext('2d');
@@ -64,18 +82,18 @@ function takePhoto() {
     canvas.width = 1080;
     canvas.height = 1920;
 
-    // 1. Desenha a imagem da câmera
+    // 1. Desenha a foto da câmera
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-    // 2. Desenha a fumaça azul e vermelha via código no Canvas
+    // 2. Desenha a fumaça lateral no Canvas
     const gradLeft = ctx.createRadialGradient(0, 960, 50, 0, 960, 600);
-    gradLeft.addColorStop(0, 'rgba(220, 38, 38, 0.45)');
+    gradLeft.addColorStop(0, 'rgba(220, 38, 38, 0.5)');
     gradLeft.addColorStop(1, 'transparent');
     ctx.fillStyle = gradLeft;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     const gradRight = ctx.createRadialGradient(1080, 960, 50, 1080, 960, 600);
-    gradRight.addColorStop(0, 'rgba(37, 99, 235, 0.45)');
+    gradRight.addColorStop(0, 'rgba(37, 99, 235, 0.5)');
     gradRight.addColorStop(1, 'transparent');
     ctx.fillStyle = gradRight;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -83,23 +101,24 @@ function takePhoto() {
     const logo = new Image();
     const badge = new Image();
 
-    const basePath = useFallback ? 'ativos/texturas/' : 'assets/textures/';
-    logo.src = basePath + 'ct_tita_logo.png';
-    badge.src = useFallback ? badgesFallback[currentBadgeIndex] : badges[currentBadgeIndex];
+    logo.src = 'ativos/texturas/ct_tita_logo.png';
+    badge.src = badges[currentBadgeIndex];
 
     let loadedCount = 0;
+    
     function renderFinal() {
         loadedCount++;
         if (loadedCount === 2) {
-            // Desenha Badge
+            // Desenha Frase / Badge
             const badgeWidth = 840;
             const badgeHeight = (badge.height / badge.width) * badgeWidth;
             const badgeY = canvas.height - 480;
-            ctx.shadowColor = 'rgba(0, 0, 0, 0.9)';
-            ctx.shadowBlur = 15;
+            
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.95)';
+            ctx.shadowBlur = 18;
             ctx.drawImage(badge, (canvas.width - badgeWidth) / 2, badgeY, badgeWidth, badgeHeight);
 
-            // Desenha Logo 3D Grande no Rodapé
+            // Desenha Logo CT Titã em 3D no Rodapé
             const logoWidth = 760;
             const logoHeight = (logo.height / logo.width) * logoWidth;
             const logoY = canvas.height - logoHeight - 70;
@@ -121,44 +140,9 @@ function takePhoto() {
     }
 
     logo.onload = renderFinal;
+    logo.onerror = () => { logo.src = 'assets/textures/ct_tita_logo.png'; };
     badge.onload = renderFinal;
-}
-
-// GRAVAÇÃO DE BOOMERANG / VÍDEO CURTO (3 SEGUNDOS)
-function toggleRecord() {
-    const recBtn = document.getElementById('recBtn');
-    
-    if (isRecording) return;
-    
-    recordedChunks = [];
-    const stream = video.srcObject;
-    mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
-
-    mediaRecorder.ondataavailable = (e) => {
-        if (e.data.size > 0) recordedChunks.push(e.data);
-    };
-
-    mediaRecorder.onstop = () => {
-        const blob = new Blob(recordedChunks, { type: 'video/webm' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `ct-tita-boomerang-${Date.now()}.webm`;
-        a.click();
-        recBtn.innerText = '🎥 Boomerang';
-        recBtn.style.background = '#dc2626';
-        isRecording = false;
-    };
-
-    mediaRecorder.start();
-    isRecording = true;
-    recBtn.innerText = '🔴 Gravando...';
-    recBtn.style.background = '#16a34a';
-
-    // Grava 3.5 segundos automaticamente (formato boomerang)
-    setTimeout(() => {
-        if (isRecording) mediaRecorder.stop();
-    }, 3500);
+    badge.onerror = () => { badge.src = badgesFallback[currentBadgeIndex]; };
 }
 
 window.addEventListener('load', initCamera);
