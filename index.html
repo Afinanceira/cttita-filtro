@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Jogos CT Titã - Filtro Oficial</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background: #111; color: #fff; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; overflow: hidden; }
+        
+        /* Container principal com proporção 9:16 de Stories */
+        .camera-container {
+            position: relative;
+            width: 100vw;
+            max-width: 405px;
+            height: 100vh;
+            max-height: 720px;
+            background: #000;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        video, canvas {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Camadas de Overlay (Moldura e Logo) */
+        .overlay {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+        }
+
+        .smoke-frame {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            mix-blend-mode: multiply; /* Faz o fundo branco da fumaça desaparecer! */
+            object-fit: cover;
+        }
+
+        .logo-header {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50%;
+            max-width: 200px;
+        }
+
+        .badge-footer {
+            position: absolute;
+            bottom: 90px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            max-width: 300px;
+            transition: transform 0.2s ease, opacity 0.2s ease;
+        }
+
+        /* Controles flutuantes no rodapé */
+        .controls {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 0 20px;
+            z-index: 10;
+        }
+
+        .btn {
+            background: rgba(220, 38, 38, 0.85);
+            color: #fff;
+            border: 2px solid #fff;
+            padding: 12px 18px;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+
+        .btn-capture {
+            background: #2563eb;
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="camera-container" id="captureArea">
+        <!-- Vídeo da Câmara -->
+        <video id="webcam" autoplay playsinline muted></video>
+
+        <!-- Camadas de sobreposição -->
+        <div class="overlay">
+            <img src="assets/textures/smoke_frame.png" class="smoke-frame" alt="Fumaça">
+            <img src="assets/textures/ct_tita_logo.png" class="logo-header" alt="CT Titã">
+            <img id="badgeImg" src="assets/textures/badge_atleta.png" class="badge-footer" alt="Badge">
+        </div>
+
+        <!-- Canvas invisível para renderizar a foto final -->
+        <canvas id="photoCanvas" style="display: none;"></canvas>
+    </div>
+
+    <!-- Botões de Ação -->
+    <div class="controls">
+        <button class="btn" onclick="nextBadge()">🔄 Mudar Badge</button>
+        <button class="btn btn-capture" onclick="takePhoto()">📸</button>
+    </div>
+
+    <script src="scripts/app.js"></script>
+</body>
+</html>
