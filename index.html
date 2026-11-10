@@ -104,7 +104,7 @@
             white-space: nowrap;
         }
 
-        /* LOGO CT TITÃ SUPER ACESA E COM MÁXIMO DESTAQUE 3D NO RODAPÉ */
+        /* LOGO CT TITÃ 3D NO RODAPÉ */
         .logo-box {
             width: 88%;
             max-width: 330px;
@@ -117,7 +117,6 @@
             width: 100%;
             max-width: 300px;
             height: auto;
-            /* Tripla camada de luzes neon e contraste para acender a logo */
             filter: saturate(1.35) contrast(1.2)
                     drop-shadow(0px 10px 22px rgba(0, 0, 0, 0.98))
                     drop-shadow(-5px 0px 18px rgba(239, 68, 68, 1))
@@ -127,20 +126,8 @@
         }
 
         @keyframes logo3dPulse {
-            0% { 
-                transform: perspective(600px) rotateX(4deg) scale(1);
-                filter: saturate(1.35) contrast(1.2)
-                        drop-shadow(0px 10px 22px rgba(0, 0, 0, 0.98))
-                        drop-shadow(-5px 0px 18px rgba(239, 68, 68, 1))
-                        drop-shadow(5px 0px 18px rgba(59, 130, 246, 1));
-            }
-            100% { 
-                transform: perspective(600px) rotateX(4deg) scale(1.05);
-                filter: saturate(1.5) contrast(1.25)
-                        drop-shadow(0px 12px 25px rgba(0, 0, 0, 1))
-                        drop-shadow(-7px 0px 25px rgba(239, 68, 68, 1))
-                        drop-shadow(7px 0px 25px rgba(59, 130, 246, 1));
-            }
+            0% { transform: perspective(600px) rotateX(4deg) scale(1); }
+            100% { transform: perspective(600px) rotateX(4deg) scale(1.05); }
         }
 
         .logo-text-fallback {
@@ -153,18 +140,93 @@
             text-shadow: 0 0 25px rgba(239, 68, 68, 0.9), 0 0 25px rgba(59, 130, 246, 0.9);
         }
 
+        /* EFEITOS DE INTERAÇÃO */
+        #flashEffect {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #fff;
+            z-index: 25;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.15s ease-out;
+        }
+
+        #countdownOverlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 20;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(4px);
+        }
+
+        #countdownNumber {
+            font-size: 120px;
+            font-weight: 700;
+            color: #fff;
+            text-shadow: 0 0 30px #dc2626, 0 0 60px #2563eb;
+        }
+
+        /* AVISO FLUTUANTE COM BOTÃO DE PARTILHA */
+        #toastMsg {
+            position: absolute;
+            top: 90px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-25px);
+            background: rgba(15, 15, 25, 0.92);
+            color: #fff;
+            padding: 12px 20px;
+            border-radius: 20px;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 13px;
+            font-weight: bold;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.85);
+            z-index: 30;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid rgba(255,255,255,0.25);
+            text-align: center;
+        }
+
+        #toastMsg.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .btn-share-native {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 15px;
+            font-weight: bold;
+            font-size: 12px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.6);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
         /* CONTROLES */
         .controls-bar {
             position: absolute;
             bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
-            width: 88%;
-            max-width: 360px;
+            width: 90%;
+            max-width: 370px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 8px 18px;
+            padding: 8px 16px;
             background: rgba(15, 15, 20, 0.85);
             backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.18);
@@ -178,14 +240,18 @@
             background: linear-gradient(135deg, #dc2626, #b91c1c);
             color: #fff;
             border: 1px solid rgba(255, 255, 255, 0.3);
-            padding: 8px 16px;
+            padding: 8px 14px;
             border-radius: 20px;
             font-family: 'Segoe UI', sans-serif;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 700;
             cursor: pointer;
             display: flex; align-items: center; gap: 4px;
             box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4);
+        }
+
+        .btn-timer {
+            background: linear-gradient(135deg, #9333ea, #7e22ce);
         }
 
         .btn-shutter {
@@ -202,13 +268,13 @@
         .btn-flip {
             background: rgba(255, 255, 255, 0.15);
             border: 1px solid rgba(255, 255, 255, 0.3);
-            color: #fff; width: 42px; height: 42px;
+            color: #fff; width: 40px; height: 40px;
             border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
-            font-size: 18px; cursor: pointer;
+            font-size: 16px; cursor: pointer;
         }
 
-        .btn-ctrl:active, .btn-flip:active, .btn-shutter:active { transform: scale(0.93); }
+        .btn-ctrl:active, .btn-flip:active, .btn-shutter:active, .btn-share-native:active { transform: scale(0.93); }
     </style>
 </head>
 <body>
@@ -218,6 +284,15 @@
 
         <div class="smoke-left"></div>
         <div class="smoke-right"></div>
+
+        <div id="flashEffect"></div>
+        <div id="countdownOverlay"><span id="countdownNumber">3</span></div>
+        
+        <!-- AVISO COM BOTÃO DE PARTILHA NATIVA -->
+        <div id="toastMsg">
+            <span>🔥 Foto pronta para os Stories!</span>
+            <button class="btn-share-native" id="shareBtn">📤 Compartilhar Agora</button>
+        </div>
 
         <div class="overlay">
             <div class="badge-card">
@@ -234,6 +309,7 @@
 
         <div class="controls-bar">
             <button class="btn-ctrl" onclick="nextBadge()">🔄 Frase</button>
+            <button class="btn-ctrl btn-timer" onclick="startCountdown()">⏱️ 3s</button>
             <button class="btn-shutter" onclick="takePhoto()" title="Tirar Foto">📸</button>
             <button class="btn-flip" onclick="switchCam()" title="Inverter Câmera">📷</button>
         </div>
@@ -250,10 +326,16 @@
         let currentBadgeIndex = 0;
         let currentFacingMode = 'user';
         let currentStream = null;
+        let lastGeneratedBlob = null;
 
         const video = document.getElementById('webcam');
         const badgeText = document.getElementById('badgeText');
         const logoImg = document.getElementById('logoImg');
+        const flashEffect = document.getElementById('flashEffect');
+        const countdownOverlay = document.getElementById('countdownOverlay');
+        const countdownNumber = document.getElementById('countdownNumber');
+        const toastMsg = document.getElementById('toastMsg');
+        const shareBtn = document.getElementById('shareBtn');
 
         function tryLoadLogo(img) {
             const paths = ['ativos/texturas/ct_tita_logo.png', 'ativos/ texturas/ct_tita_logo.png', 'assets/textures/ct_tita_logo.png'];
@@ -304,7 +386,56 @@
             }, 120);
         }
 
+        function startCountdown() {
+            countdownOverlay.style.display = 'flex';
+            let count = 3;
+            countdownNumber.innerText = count;
+
+            const timer = setInterval(() => {
+                count--;
+                if (count > 0) {
+                    countdownNumber.innerText = count;
+                } else {
+                    clearInterval(timer);
+                    countdownOverlay.style.display = 'none';
+                    takePhoto();
+                }
+            }, 1000);
+        }
+
+        function triggerFlashAndToast() {
+            flashEffect.style.opacity = '1';
+            setTimeout(() => { flashEffect.style.opacity = '0'; }, 150);
+
+            toastMsg.classList.add('show');
+            setTimeout(() => { toastMsg.classList.remove('show'); }, 6000); // Fica visível por 6 segundos para dar tempo de clicar
+        }
+
+        // LÓGICA DE PARTILHA NATIVA DO SMARTPHONE
+        shareBtn.addEventListener('click', async () => {
+            if (!lastGeneratedBlob) return;
+
+            const file = new File([lastGeneratedBlob], `ct-tita-wod-${Date.now()}.png`, { type: 'image/png' });
+
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                try {
+                    await navigator.share({
+                        title: 'Jogos CT Titã',
+                        text: 'Meu WOD pago nos Jogos Internos do CT Titã! 🔥',
+                        files: [file]
+                    });
+                } catch (err) {
+                    console.log('Partilha cancelada ou não concluída', err);
+                }
+            } else {
+                // Fallback se o navegador não suportar arquivos na share API
+                alert('O seu navegador não suporta partilha direta de arquivos. A foto foi exibida na tela.');
+            }
+        });
+
         function takePhoto() {
+            triggerFlashAndToast();
+
             const canvas = document.getElementById('photoCanvas');
             const ctx = canvas.getContext('2d');
 
@@ -375,10 +506,10 @@
 
             ctx.shadowColor = 'transparent';
 
-            const link = document.createElement('a');
-            link.download = `ct-tita-wod-${Date.now()}.png`;
-            link.href = canvas.toDataURL('image/png');
-            link.click();
+            // Armazena a imagem em memória (Blob) para partilha nativa instantânea sem download
+            canvas.toBlob((blob) => {
+                lastGeneratedBlob = blob;
+            }, 'image/png');
         }
 
         window.addEventListener('load', () => startCamera(currentFacingMode));
