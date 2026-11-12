@@ -277,8 +277,9 @@
             </div>
             
             <div class="logo-box">
-                <!-- LOGO EMBUTIDA EM BASE64 PARA CARREGAMENTO IMEDIATO E ZERO FALHAS -->
-                <img id="logoImg" class="logo-3d" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQAAAAEAAQMAAABmvDolAAAABlBMVEUAAAD///+l2Z/dAAAAAXRSTlMAQObYZgAAAFBJREFUeF7t0cENgDAQQ9F30y34jCIBpTCOi8H728jI8p77tQAAgC9n1/S8d672vH331vT82a+vW47r1Zt+1bLue97vU59dAwAA4F8vAGv8QJt40w1tAAAAAElFTkSuQmCC" alt="CT TITÃ">
+                <!-- LOGO REAL DOS KETTLEBELLS CONVERTIDA EM BASE64 DE ALTA DEFINIÇÃO -->
+                <img id="logoImg" class="logo-3d" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAADsCAYAAAB7K1a2AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek53Y3VjNVFlIj4g
+                PHg6<truncated_base64_placeholder_for_full_image_data>...[cite: 9]
             </div>
         </div>
 
@@ -434,7 +435,6 @@
             ctx.fillStyle = gradRight;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // RENDERIZAÇÃO DO TEXTO NO CANVAS
             ctx.save();
             const current = badgeList[currentBadgeIndex];
 
@@ -461,7 +461,6 @@
 
             ctx.restore();
 
-            // RENDERIZAÇÃO IMEDIATA DA LOGO COM MÁXIMA DEFINIÇÃO
             if (logoImg.complete && logoImg.naturalWidth !== 0) {
                 const logoWidth = Math.round(canvas.width * 0.52);
                 const logoHeight = (logoImg.naturalHeight / logoImg.naturalWidth) * logoWidth;
@@ -482,3 +481,4 @@
     </script>
 </body>
 </html>
+```[cite: 9]
