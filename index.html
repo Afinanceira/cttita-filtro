@@ -251,8 +251,8 @@
             </div>
             
             <div class="logo-box">
-                <!-- LOGO APONTADA DIRETAMENTE PARA O CDN DE ALTA PERFORMANCE (IMGBB) -->
-                <img id="logoImg" class="logo-3d" src="https://i.ibb.co/J15WVcr/ct-tita_logo.png" alt="CT TITÃ">
+                <!-- LOGO COM ATRIBUTO CROSSORIGIN PARA PERMITIR A PARTILHA NO CANVAS -->
+                <img id="logoImg" class="logo-3d" src="https://i.ibb.co/J15WVcr/ct-tita_logo.png" crossorigin="anonymous" alt="CT TITÃ">
             </div>
         </div>
 
@@ -300,9 +300,9 @@
         const maskScreen = document.getElementById('maskScreen');
         const stageArea = document.getElementById('stageArea');
 
-        // FUNÇÃO DE DISPARO: O atleta clica em "Carregar Filtro"
         function initializeExperience() {
-            // Garante o carregamento síncrono da logo via CDN
+            logoImg.crossOrigin = "anonymous";
+            
             logoImg.onload = () => {
                 maskScreen.style.opacity = '0';
                 setTimeout(() => { 
@@ -425,7 +425,6 @@
             ctx.fillText(current.subtitle, canvas.width / 2, 260);
             ctx.restore();
 
-            // RENDERIZAÇÃO DA LOGO DO CDN NO CANVAS
             if (logoImg && logoImg.complete && logoImg.naturalWidth !== 0) {
                 const logoWidth = Math.round(canvas.width * 0.52);
                 const logoHeight = (logoImg.naturalHeight / logoImg.naturalWidth) * logoWidth;
