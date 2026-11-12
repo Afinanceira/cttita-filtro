@@ -77,7 +77,7 @@
             padding: max(45px, env(safe-area-inset-top) + 15px) 15px max(95px, env(safe-area-inset-bottom)) 15px;
         }
 
-        /* TEXTO FLUTUANTE RETO (SEM CAIXA E SEM INCLINAÇÃO) */
+        /* TEXTO FLUTUANTE RETO E MAIOR (SEM CAIXA) */
         .badge-card {
             text-align: center;
             display: flex;
@@ -88,7 +88,7 @@
         }
 
         .badge-title {
-            font-size: clamp(34px, 8.5vw, 46px);
+            font-size: clamp(40px, 9.5vw, 54px); /* Aumentado para maior impacto */
             font-weight: 700;
             line-height: 0.9;
             letter-spacing: 2px;
@@ -96,17 +96,17 @@
             background: linear-gradient(90deg, #ff4d4d 0%, #ffffff 50%, #3b82f6 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0px 4px 12px rgba(0, 0, 0, 0.95));
+            filter: drop-shadow(0px 4px 14px rgba(0, 0, 0, 0.95));
         }
 
         .badge-subtitle {
-            font-size: clamp(14px, 3.8vw, 18px);
+            font-size: clamp(16px, 4.2vw, 21px); /* Subtítulo ajustado e mais legível */
             font-weight: 700;
-            letter-spacing: 3.5px;
+            letter-spacing: 4px;
             color: #cbd5e1;
             text-transform: uppercase;
-            margin-top: 4px;
-            filter: drop-shadow(0px 2px 8px rgba(0, 0, 0, 0.95));
+            margin-top: 6px;
+            filter: drop-shadow(0px 2px 10px rgba(0, 0, 0, 0.95));
         }
 
         /* LOGO KETTLEBELLS NO RODAPÉ */
@@ -317,7 +317,7 @@
 
         const badgeList = [
             { title: "ATLETA CONFIRMADO", subtitle: "JOGOS INTERNOS 2026" },
-            { title: "SOBREVIVI AO WOD", subtitle: "JOGOS INTERNOS 2026" },
+            { title: "SOBREVIVI A PROVA", subtitle: "JOGOS INTERNOS 2026" },
             { title: "RUMO AO PÓDIO", subtitle: "JOGOS INTERNOS 2026" },
             { title: "MODO TITÃ", subtitle: "JOGOS INTERNOS 2026" }
         ];
@@ -458,12 +458,12 @@
             ctx.fillStyle = gradRight;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // RENDERIZAÇÃO DO TEXTO FLUTUANTE RETO (SEM INCLINAÇÃO E SEM CAIXA) NO CANVAS
+            // RENDERIZAÇÃO DO TEXTO MAIOR E RETO NO CANVAS
             ctx.save();
             const current = badgeList[currentBadgeIndex];
 
-            // Título Principal com Sombra Forte
-            const titleFontSize = 75;
+            // Título Principal Maior e com Sombra Robusta
+            const titleFontSize = 90; // Proporção ampliada para alta resolução
             ctx.font = `700 ${titleFontSize}px "Teko", sans-serif`;
             ctx.textAlign = 'center';
             
@@ -474,16 +474,16 @@
 
             ctx.fillStyle = textGrad;
             ctx.shadowColor = 'rgba(0, 0, 0, 0.95)';
-            ctx.shadowBlur = 18;
-            ctx.shadowOffsetY = 4;
+            ctx.shadowBlur = 20;
+            ctx.shadowOffsetY = 5;
             ctx.fillText(current.title, canvas.width / 2, 210);
 
-            // Subtítulo / Legenda
-            const subFontSize = 32;
+            // Subtítulo / Legenda Ajustada
+            const subFontSize = 38;
             ctx.font = `700 ${subFontSize}px "Teko", sans-serif`;
             ctx.fillStyle = '#cbd5e1';
-            ctx.shadowBlur = 10;
-            ctx.fillText(current.subtitle, canvas.width / 2, 255);
+            ctx.shadowBlur = 12;
+            ctx.fillText(current.subtitle, canvas.width / 2, 260);
 
             ctx.restore();
 
