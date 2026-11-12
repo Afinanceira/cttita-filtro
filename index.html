@@ -77,35 +77,42 @@
             padding: max(45px, env(safe-area-inset-top) + 15px) 15px max(95px, env(safe-area-inset-bottom)) 15px;
         }
 
-        /* FRASE NO TOPO BLINDADA */
+        /* ESTILO ADESIVO INCLINADO NO TOPO */
         .badge-card {
-            width: 92%;
-            max-width: 380px;
-            background: rgba(10, 10, 18, 0.92);
+            background: rgba(8, 8, 14, 0.88);
             border: 2px solid #dc2626;
-            border-radius: 8px;
-            padding: 4px 10px;
+            border-radius: 10px;
+            padding: 8px 16px;
             text-align: center;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.9), inset 0 0 10px rgba(37, 99, 235, 0.4);
-            white-space: nowrap;
-            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.95);
+            transform: rotate(-2.5deg); /* Levemente inclinado como na referência */
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
+            justify-content: center;
         }
 
-        .badge-text {
-            font-size: clamp(20px, 5.2vw, 30px);
+        .badge-title {
+            font-size: clamp(26px, 6.5vw, 36px);
             font-weight: 700;
-            letter-spacing: 1.5px;
+            line-height: 0.95;
+            letter-spacing: 2px;
             text-transform: uppercase;
             background: linear-gradient(90deg, #ff4d4d 0%, #ffffff 50%, #3b82f6 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            white-space: nowrap;
         }
 
-        /* LOGO KETTLEBELLS NO RODAPÉ (VISUALIZAÇÃO) */
+        .badge-subtitle {
+            font-size: clamp(12px, 3.2vw, 16px);
+            font-weight: 700;
+            letter-spacing: 3px;
+            color: #94a3b8;
+            text-transform: uppercase;
+            margin-top: 2px;
+        }
+
+        /* LOGO KETTLEBELLS NO RODAPÉ */
         .logo-box {
             width: 88%;
             max-width: 330px;
@@ -117,7 +124,7 @@
 
         .logo-3d {
             width: 100%;
-            max-width: 210px; /* Tamanho intermediário ideal */
+            max-width: 210px;
             height: auto;
             filter: drop-shadow(0px 8px 16px rgba(0, 0, 0, 0.9));
         }
@@ -277,7 +284,8 @@
 
         <div class="overlay">
             <div class="badge-card">
-                <span id="badgeText" class="badge-text">[ ATLETA CONFIRMADO ]</span>
+                <span id="badgeTitle" class="badge-title">ATLETA CONFIRMADO</span>
+                <span id="badgeSubtitle" class="badge-subtitle">JOGOS INTERNOS 2026</span>
             </div>
             
             <div class="logo-box">
@@ -304,11 +312,18 @@
     </div>
 
     <script>
-        const badgeTexts = [
-            '[ ATLETA CONFIRMADO ]',
-            '[ SOBREVIVI A PROVA ]',
-            '[ RUMO AO PÓDIO ]',
-            '[ MODO TITÃ ]'
+        window.addEventListener('pageshow', (event) => {
+            if (event.persisted) {
+                window.location.reload();
+            }
+        });
+
+        // Frases estruturadas em título e legenda (estilo adesivo moderno)
+        const badgeList = [
+            { title: "ATLETA CONFIRMADO", subtitle: "JOGOS INTERNOS 2026" },
+            { title: "SOBREVIVI AO WOD", subtitle: "JOGOS INTERNOS 2026" },
+            { title: "RUMO AO PÓDIO", subtitle: "JOGOS INTERNOS 2026" },
+            { title: "MODO TITÃ", subtitle: "JOGOS INTERNOS 2026" }
         ];
 
         let currentBadgeIndex = 0;
@@ -317,11 +332,15 @@
         let lastGeneratedBlob = null;
 
         const video = document.getElementById('webcam');
-        const badgeText = document.getElementById('badgeText');
+        const badgeTitleElem = document.getElementById('badgeTitle');
+        const badgeSubtitleElem = document.getElementById('badgeSubtitle');
         const logoImg = document.getElementById('logoImg');
         const flashEffect = document.getElementById('flashEffect');
         const toastMsg = document.getElementById('toastMsg');
         const shareBtn = document.getElementById('shareBtn');
+
+        const preloadedLogo = new Image();
+        preloadedLogo.src = 'ct_tita_logo.png';
 
         function tryLoadLogo(img) {
             const paths = ['ativos/texturas/ct_tita_logo.png', 'ativos/ texturas/ct_tita_logo.png', 'assets/textures/ct_tita_logo.png'];
@@ -364,11 +383,17 @@
         }
 
         function nextBadge() {
-            currentBadgeIndex = (currentBadgeIndex + 1) % badgeTexts.length;
-            badgeText.style.opacity = '0';
+            currentBadgeIndex = (currentBadgeIndex + 1) % badgeList.length;
+            const current = badgeList[currentBadgeIndex];
+            
+            badgeTitleElem.style.opacity = '0';
+            badgeSubtitleElem.style.opacity = '0';
+            
             setTimeout(() => {
-                badgeText.innerText = badgeTexts[currentBadgeIndex];
-                badgeText.style.opacity = '1';
+                badgeTitleElem.innerText = current.title;
+                badgeSubtitleElem.innerText = current.subtitle;
+                badgeTitleElem.style.opacity = '1';
+                badgeSubtitleElem.style.opacity = '1';
             }, 120);
         }
 
@@ -408,7 +433,6 @@
             const canvas = document.getElementById('photoCanvas');
             const ctx = canvas.getContext('2d');
 
-            // RESOLUÇÃO MÁXIMA ALTA DEFINIÇÃO
             canvas.width = 1080;
             canvas.height = 1920;
 
@@ -438,44 +462,64 @@
             ctx.fillStyle = gradRight;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            const badgeY = Math.round(canvas.height * 0.055);
-            const badgeH = Math.round(canvas.height * 0.055);
-            const badgeW = Math.round(canvas.width * 0.9);
+            // RENDERIZAÇÃO DO ADESIVO INCLINADO NO CANVAS
+            ctx.save();
+            const badgeW = 750;
+            const badgeH = 150;
             const badgeX = (canvas.width - badgeW) / 2;
+            const badgeY = 120;
 
-            ctx.fillStyle = 'rgba(10, 10, 18, 0.92)';
+            ctx.translate(canvas.width / 2, badgeY + badgeH / 2);
+            ctx.rotate(-2.5 * Math.PI / 180); // Inclinado exatamente como na referência
+
+            ctx.fillStyle = 'rgba(8, 8, 14, 0.90)';
             if (ctx.roundRect) {
-                ctx.roundRect(badgeX, badgeY, badgeW, badgeH, 12);
+                ctx.roundRect(-badgeW / 2, -badgeH / 2, badgeW, badgeH, 16);
             } else {
-                ctx.fillRect(badgeX, badgeY, badgeW, badgeH);
+                ctx.fillRect(-badgeW / 2, -badgeH / 2, badgeW, badgeH);
             }
             ctx.fill();
 
-            ctx.lineWidth = 4;
+            ctx.lineWidth = 6;
             ctx.strokeStyle = '#dc2626';
             ctx.stroke();
 
-            const textGrad = ctx.createLinearGradient(badgeX, 0, badgeX + badgeW, 0);
+            const current = badgeList[currentBadgeIndex];
+
+            // Título Principal
+            const titleFontSize = 62;
+            ctx.font = `700 ${titleFontSize}px "Teko", sans-serif`;
+            ctx.textAlign = 'center';
+            
+            const textGrad = ctx.createLinearGradient(-badgeW / 2, 0, badgeW / 2, 0);
             textGrad.addColorStop(0, '#ff4d4d');
             textGrad.addColorStop(0.5, '#ffffff');
             textGrad.addColorStop(1, '#3b82f6');
 
-            const fontSize = Math.round(canvas.width * 0.052);
-            ctx.font = `700 ${fontSize}px "Teko", sans-serif`;
-            ctx.textAlign = 'center';
             ctx.fillStyle = textGrad;
             ctx.shadowColor = 'rgba(0, 0, 0, 0.95)';
             ctx.shadowBlur = 12;
-            ctx.fillText(badgeTexts[currentBadgeIndex], canvas.width / 2, badgeY + (badgeH * 0.72));
+            ctx.fillText(current.title, 0, -10);
 
-            // RENDERIZAÇÃO DA LOGO CRUA, NÍTIDA E SEM SOMBRAS BORRADAS
-            if (logoImg.complete && logoImg.naturalWidth !== 0) {
-                const logoWidth = Math.round(canvas.width * 0.52); // Tamanho ideal equilibrado
-                const logoHeight = (logoImg.naturalHeight / logoImg.naturalWidth) * logoWidth;
+            // Subtítulo / Legenda
+            const subFontSize = 26;
+            ctx.font = `700 ${subFontSize}px "Teko", sans-serif`;
+            ctx.fillStyle = '#94a3b8';
+            ctx.shadowBlur = 4;
+            ctx.fillText(current.subtitle, 0, 38);
+
+            ctx.restore();
+
+            // RENDERIZAÇÃO DA LOGO NO RODAPÉ
+            const activeLogo = (preloadedLogo.complete && preloadedLogo.naturalWidth !== 0) ? preloadedLogo : logoImg;
+
+            if (activeLogo.complete && activeLogo.naturalWidth !== 0) {
+                const logoWidth = Math.round(canvas.width * 0.52);
+                const logoHeight = (activeLogo.naturalHeight / activeLogo.naturalWidth) * logoWidth;
                 const logoY = canvas.height - logoHeight - Math.round(canvas.height * 0.06);
 
-                ctx.shadowColor = 'transparent'; // Remove qualquer sombra opaca
-                ctx.drawImage(logoImg, (canvas.width - logoWidth) / 2, logoY, logoWidth, logoHeight);
+                ctx.shadowColor = 'transparent';
+                ctx.drawImage(activeLogo, (canvas.width - logoWidth) / 2, logoY, logoWidth, logoHeight);
             } else {
                 const logoFontSize = Math.round(canvas.width * 0.085);
                 ctx.font = `700 ${logoFontSize}px "Teko", sans-serif`;
@@ -485,7 +529,6 @@
 
             ctx.shadowColor = 'transparent';
 
-            // GERAÇÃO DO BLOB COM QUALIDADE MÁXIMA (PNG NÍTIDO)
             canvas.toBlob((blob) => {
                 lastGeneratedBlob = blob;
             }, 'image/png', 1.0);
