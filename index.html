@@ -281,7 +281,7 @@
         </div>
 
         <div class="overlay">
-            <!-- CABEÇALHO COM AS SETAS LATERAIS INDICANDO O TOQUE PARA MUDAR FRASES -->
+            <!-- CABEÇALHO CLICÁVEL PARA MUDAR FRASES COM SETAS -->
             <div class="badge-card" onclick="nextBadge()" title="Toque para mudar frase">
                 <div class="badge-title">
                     <span class="arrow-indicator">‹</span>
@@ -415,7 +415,7 @@
         }
 
         shareBtn.addEventListener('click', async () => {
-            if (!logGeneratedBlob = lastGeneratedBlob) return;
+            if (!lastGeneratedBlob) return;
             const file = new File([lastGeneratedBlob], `ct-tita-wod-${Date.now()}.png`, { type: 'image/png' });
             
             if (navigator.canShare && navigator.canShare({ files: [file] })) {
@@ -472,7 +472,6 @@
 
             ctx.fillStyle = textGrad;
             ctx.shadowColor = 'rgba(0, 0, 0, 0.95)'; ctx.shadowBlur = 20; ctx.shadowOffsetY = 5;
-            // Desenha o título limpo na foto (sem as setas visuais da tela, para a foto sair perfeita)
             ctx.fillText(current.title, canvas.width / 2, 210);
 
             const subFontSize = 38;
@@ -490,7 +489,9 @@
             }
 
             ctx.shadowColor = 'transparent';
-            canvas.toBlob((blob) => { lastGeneratedBlob = blob; }, 'image/png', 1.0);
+            canvas.toBlob((blob) => { 
+                lastGeneratedBlob = blob; 
+            }, 'image/png', 1.0);
         }
     </script>
 </body>
