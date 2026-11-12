@@ -77,10 +77,9 @@
             padding: max(45px, env(safe-area-inset-top) + 15px) 15px max(95px, env(safe-area-inset-bottom)) 15px;
         }
 
-        /* TEXTO FLUTUANTE INCLINADO (SEM CAIXA, ESTILO ADESIVO PURO) */
+        /* TEXTO FLUTUANTE RETO (SEM CAIXA E SEM INCLINAÇÃO) */
         .badge-card {
             text-align: center;
-            transform: rotate(-3deg);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -459,11 +458,8 @@
             ctx.fillStyle = gradRight;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // RENDERIZAÇÃO DO TEXTO FLUTUANTE INCLINADO SEM CAIXA NO CANVAS
+            // RENDERIZAÇÃO DO TEXTO FLUTUANTE RETO (SEM INCLINAÇÃO E SEM CAIXA) NO CANVAS
             ctx.save();
-            ctx.translate(canvas.width / 2, 210);
-            ctx.rotate(-3 * Math.PI / 180);
-
             const current = badgeList[currentBadgeIndex];
 
             // Título Principal com Sombra Forte
@@ -471,7 +467,7 @@
             ctx.font = `700 ${titleFontSize}px "Teko", sans-serif`;
             ctx.textAlign = 'center';
             
-            const textGrad = ctx.createLinearGradient(-300, 0, 300, 0);
+            const textGrad = ctx.createLinearGradient(140, 0, 940, 0);
             textGrad.addColorStop(0, '#ff4d4d');
             textGrad.addColorStop(0.5, '#ffffff');
             textGrad.addColorStop(1, '#3b82f6');
@@ -480,14 +476,14 @@
             ctx.shadowColor = 'rgba(0, 0, 0, 0.95)';
             ctx.shadowBlur = 18;
             ctx.shadowOffsetY = 4;
-            ctx.fillText(current.title, 0, 0);
+            ctx.fillText(current.title, canvas.width / 2, 210);
 
             // Subtítulo / Legenda
             const subFontSize = 32;
             ctx.font = `700 ${subFontSize}px "Teko", sans-serif`;
             ctx.fillStyle = '#cbd5e1';
             ctx.shadowBlur = 10;
-            ctx.fillText(current.subtitle, 0, 48);
+            ctx.fillText(current.subtitle, canvas.width / 2, 255);
 
             ctx.restore();
 
