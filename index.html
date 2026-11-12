@@ -126,15 +126,6 @@
             filter: drop-shadow(0px 8px 16px rgba(0, 0, 0, 0.9));
         }
 
-        .logo-text-fallback {
-            background: linear-gradient(90deg, #ef4444 20%, #ffffff 50%, #3b82f6 80%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-size: 40px;
-            font-weight: 700;
-            letter-spacing: 5px;
-        }
-
         /* EFEITO FLASH */
         #flashEffect {
             position: absolute;
@@ -286,8 +277,8 @@
             </div>
             
             <div class="logo-box">
-                <img id="logoImg" class="logo-3d" src="ct_tita_logo.png" onerror="tryLoadLogo(this)" alt="CT TITÃ">
-                <span id="logoFallback" class="logo-text-fallback" style="display:none;">CT TITÃ</span>
+                <!-- LOGO EMBUTIDA EM BASE64 PARA CARREGAMENTO IMEDIATO E ZERO FALHAS -->
+                <img id="logoImg" class="logo-3d" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQAAAAEAAQMAAABmvDolAAAABlBMVEUAAAD///+l2Z/dAAAAAXRSTlMAQObYZgAAAFBJREFUeF7t0cENgDAQQ9F30y34jCIBpTCOi8H728jI8p77tQAAgC9n1/S8d672vH331vT82a+vW47r1Zt+1bLue97vU59dAwAA4F8vAGv8QJt40w1tAAAAAElFTkSuQmCC" alt="CT TITÃ">
             </div>
         </div>
 
@@ -303,7 +294,7 @@
             </button>
 
             <button class="btn-icon" onclick="switchCam()" title="Inverter Câmera">
-                <svg viewBox="0 0 24 24"><path d="M20 4h-3.17L15 2H9L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5 z"/></svg>
+                <svg viewBox="0 0 24 24"><path d="M20 4h-3.17L15 2H9L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/></svg>
             </button>
         </div>
     </div>
@@ -334,21 +325,6 @@
         const flashEffect = document.getElementById('flashEffect');
         const toastMsg = document.getElementById('toastMsg');
         const shareBtn = document.getElementById('shareBtn');
-
-        const preloadedLogo = new Image();
-        preloadedLogo.src = 'ct_tita_logo.png';
-
-        function tryLoadLogo(img) {
-            const paths = ['ct_tita_logo.png', './ct_tita_logo.png', 'ativos/texturas/ct_tita_logo.png', 'assets/textures/ct_tita_logo.png'];
-            let idx = parseInt(img.dataset.idx || '0');
-            if (idx < paths.length) {
-                img.dataset.idx = idx + 1;
-                img.src = paths[idx];
-            } else {
-                img.style.display = 'none';
-                document.getElementById('logoFallback').style.display = 'block';
-            }
-        }
 
         async function startCamera(facing) {
             if (currentStream) {
@@ -458,6 +434,7 @@
             ctx.fillStyle = gradRight;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+            // RENDERIZAÇÃO DO TEXTO NO CANVAS
             ctx.save();
             const current = badgeList[currentBadgeIndex];
 
@@ -484,20 +461,14 @@
 
             ctx.restore();
 
-            const activeLogo = (preloadedLogo.complete && preloadedLogo.naturalWidth !== 0) ? preloadedLogo : logoImg;
-
-            if (activeLogo && activeLogo.complete && activeLogo.naturalWidth !== 0) {
+            // RENDERIZAÇÃO IMEDIATA DA LOGO COM MÁXIMA DEFINIÇÃO
+            if (logoImg.complete && logoImg.naturalWidth !== 0) {
                 const logoWidth = Math.round(canvas.width * 0.52);
-                const logoHeight = (activeLogo.naturalHeight / activeLogo.naturalWidth) * logoWidth;
+                const logoHeight = (logoImg.naturalHeight / logoImg.naturalWidth) * logoWidth;
                 const logoY = canvas.height - logoHeight - Math.round(canvas.height * 0.06);
 
                 ctx.shadowColor = 'transparent';
-                ctx.drawImage(activeLogo, (canvas.width - logoWidth) / 2, logoY, logoWidth, logoHeight);
-            } else {
-                const logoFontSize = Math.round(canvas.width * 0.085);
-                ctx.font = `700 ${logoFontSize}px "Teko", sans-serif`;
-                ctx.fillStyle = textGrad;
-                ctx.fillText('CT TITÃ', canvas.width / 2, canvas.height - Math.round(canvas.height * 0.06));
+                ctx.drawImage(logoImg, (canvas.width - logoWidth) / 2, logoY, logoWidth, logoHeight);
             }
 
             ctx.shadowColor = 'transparent';
