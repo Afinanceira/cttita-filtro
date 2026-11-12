@@ -32,7 +32,7 @@
             z-index: 1;
         }
 
-        /* TELA DE MÁSCARA INICIAL */
+        /* TELA DE MÁSCARA INICIAL (BOTAO MENOR E ELEGANTE) */
         #maskScreen {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -48,26 +48,26 @@
         }
 
         .mask-logo-preview {
-            width: 120px;
+            width: 110px;
             height: auto;
-            margin-bottom: 20px;
-            filter: drop-shadow(0 0 20px rgba(255,255,255,0.2));
+            margin-bottom: 18px;
+            filter: drop-shadow(0 0 16px rgba(255,255,255,0.25));
         }
 
         .mask-title {
-            font-size: 36px;
+            font-size: 34px;
             text-transform: uppercase;
-            letter-spacing: 3px;
-            margin-bottom: 10px;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
             line-height: 1.1;
         }
 
         .mask-desc {
             font-family: sans-serif;
-            font-size: 14px;
+            font-size: 13px;
             color: #94a3b8;
-            max-width: 280px;
-            margin-bottom: 30px;
+            max-width: 270px;
+            margin-bottom: 25px;
             line-height: 1.4;
         }
 
@@ -75,23 +75,23 @@
             background: linear-gradient(135deg, #ef4444 0%, #dc2626 50%, #2563eb 100%);
             color: #fff;
             border: none;
-            padding: 18px 36px;
-            border-radius: 50px;
+            padding: 12px 28px;
+            border-radius: 40px;
             font-family: 'Teko', sans-serif;
-            font-size: 28px;
+            font-size: 22px;
             text-transform: uppercase;
-            letter-spacing: 3px;
+            letter-spacing: 2px;
             cursor: pointer;
-            box-shadow: 0 10px 30px rgba(220, 38, 38, 0.5);
+            box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4);
             transition: transform 0.2s, box-shadow 0.2s;
-            display: flex;
+            display: inline-flex;
             align-items: center;
-            gap: 12px;
+            gap: 8px;
         }
 
         .btn-load-filter:active {
             transform: scale(0.95);
-            box-shadow: 0 5px 15px rgba(220, 38, 38, 0.3);
+            box-shadow: 0 3px 10px rgba(220, 38, 38, 0.2);
         }
 
         /* FUMAÇA ANIMADA NAS LATERAIS */
@@ -158,6 +158,13 @@
             filter: drop-shadow(0px 8px 16px rgba(0, 0, 0, 0.9));
         }
 
+        .logo-text-fallback {
+            background: linear-gradient(90deg, #ef4444 20%, #ffffff 50%, #3b82f6 80%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 40px; font-weight: 700; letter-spacing: 5px;
+        }
+
         #flashEffect {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: #fff; z-index: 25; opacity: 0; pointer-events: none;
@@ -220,13 +227,13 @@
 </head>
 <body>
 
-    <!-- TELA DE MÁSCARA COM BOTÃO DE DISPARO -->
+    <!-- TELA DE MÁSCARA INICIAL -->
     <div id="maskScreen">
         <img src="ct_tita_logo.png" class="mask-logo-preview" alt="Logo CT Titã">
         <h1 class="mask-title">Jogos Internos CT Titã</h1>
-        <p class="mask-desc">Toque no botão abaixo para preparar e carregar o seu filtro oficial.</p>
+        <p class="mask-desc">Toque no botão abaixo para carregar o seu filtro oficial.</p>
         <button class="btn-load-filter" onclick="initializeExperience()">
-            <span>⚡</span> CARREGAR FILTRO
+            <span>⚡</span> Carregar Filtro
         </button>
     </div>
 
@@ -250,7 +257,8 @@
             </div>
             
             <div class="logo-box">
-                <img id="logoImg" class="logo-3d" src="ct_tita_logo.png" alt="CT TITÃ">
+                <img id="logoImg" class="logo-3d" src="ct_tita_logo.png" onerror="tryLoadLogo(this)" alt="CT TITÃ">
+                <span id="logoFallback" class="logo-text-fallback" style="display:none;">CT TITÃ</span>
             </div>
         </div>
 
@@ -297,10 +305,19 @@
         const shareBtn = document.getElementById('shareBtn');
         const maskScreen = document.getElementById('maskScreen');
 
-        // Pré-carrega a imagem silenciosamente
-        const preloadedLogo = new Image();
-        preloadedLogo.src = 'ct_tita_logo.png';
+        function tryLoadLogo(img) {
+            const paths = ['ct_tita_logo.png', './ct_tita_logo.png', 'ativos/texturas/ct_tita_logo.png', 'assets/textures/ct_tita_logo.png'];
+            let idx = parseInt(img.dataset.idx || '0');
+            if (idx < paths.length) {
+                img.dataset.idx = idx + 1;
+                img.src = paths[idx];
+            } else {
+                img.style.display = 'none';
+                document.getElementById('logoFallback').style.display = 'block';
+            }
+        }
 
+        // AÇÃO DO BOTÃO: Carrega a logo e inicia a câmara com o filtro pronto
         function initializeExperience() {
             maskScreen.style.opacity = '0';
             setTimeout(() => { maskScreen.style.display = 'none'; }, 400);
@@ -406,13 +423,12 @@
             ctx.fillText(current.subtitle, canvas.width / 2, 260);
             ctx.restore();
 
-            const renderingLogo = (preloadedLogo.complete) ? preloadedLogo : logoImg;
-            if (renderingLogo && renderingLogo.complete) {
+            if (logoImg && logoImg.complete && logoImg.naturalWidth !== 0) {
                 const logoWidth = Math.round(canvas.width * 0.52);
-                const logoHeight = (renderingLogo.naturalHeight / renderingLogo.naturalWidth) * logoWidth;
+                const logoHeight = (logoImg.naturalHeight / logoImg.naturalWidth) * logoWidth;
                 const logoY = canvas.height - logoHeight - Math.round(canvas.height * 0.06);
                 ctx.shadowColor = 'transparent';
-                ctx.drawImage(renderingLogo, (canvas.width - logoWidth) / 2, logoY, logoWidth, logoHeight);
+                ctx.drawImage(logoImg, (canvas.width - logoWidth) / 2, logoY, logoWidth, logoHeight);
             }
 
             ctx.shadowColor = 'transparent';
