@@ -132,20 +132,37 @@
             text-align: center; display: flex;
             flex-direction: column; align-items: center;
             justify-content: center; margin-top: 10px;
+            pointer-events: auto; cursor: pointer;
+            padding: 8px 16px; border-radius: 16px;
+            background: rgba(0, 0, 0, 0.25);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.2s;
         }
+        .badge-card:active { background: rgba(255, 255, 255, 0.15); transform: scale(0.98); }
 
         .badge-title {
-            font-size: clamp(40px, 9.5vw, 54px);
+            font-size: clamp(36px, 9vw, 50px);
             font-weight: 700; line-height: 0.9;
             letter-spacing: 2px; text-transform: uppercase;
             background: linear-gradient(90deg, #ff4d4d 0%, #ffffff 50%, #3b82f6 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             filter: drop-shadow(0px 4px 14px rgba(0, 0, 0, 0.95));
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            display: flex; align-items: center; gap: 8px;
+        }
+
+        .arrow-indicator {
+            font-size: 26px;
+            color: #94a3b8;
+            -webkit-text-fill-color: #94a3b8;
+            opacity: 0.8;
+            transition: transform 0.2s;
         }
 
         .badge-subtitle {
-            font-size: clamp(16px, 4.2vw, 21px);
+            font-size: clamp(15px, 4vw, 20px);
             font-weight: 700; letter-spacing: 4px;
             color: #cbd5e1; text-transform: uppercase;
             margin-top: 6px;
@@ -173,24 +190,38 @@
             position: absolute; top: 75px; left: 50%;
             transform: translateX(-50%) translateY(-25px);
             background: rgba(15, 15, 25, 0.95); color: #fff;
-            padding: 14px 22px; border-radius: 20px;
+            padding: 16px 24px; border-radius: 20px;
             font-family: 'Segoe UI', sans-serif; font-size: 13px; font-weight: bold;
             box-shadow: 0 8px 25px rgba(0,0,0,0.85); z-index: 30; opacity: 0;
             transition: all 0.3s ease; pointer-events: auto;
             display: flex; flex-direction: column; align-items: center;
-            gap: 10px; border: 1px solid rgba(255,255,255,0.25); text-align: center;
+            gap: 12px; border: 1px solid rgba(255,255,255,0.25); text-align: center;
         }
 
         #toastMsg.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
+        .toast-actions {
+            display: flex; gap: 10px; width: 100%; justify-content: center;
+        }
+
         .btn-share-native {
             background: linear-gradient(135deg, #2563eb, #1d4ed8);
-            color: #fff; border: none; padding: 8px 18px;
-            border-radius: 15px; font-weight: bold; font-size: 12px;
+            color: #fff; border: none; padding: 8px 16px;
+            border-radius: 12px; font-weight: bold; font-size: 12px;
             cursor: pointer; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.6);
             display: flex; align-items: center; gap: 6px;
         }
 
+        .btn-retake {
+            background: rgba(255, 255, 255, 0.15);
+            color: #fff; border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 8px 16px; border-radius: 12px; font-weight: bold; font-size: 12px;
+            cursor: pointer; display: flex; align-items: center; gap: 6px;
+            transition: background 0.2s;
+        }
+        .btn-retake:active { background: rgba(255, 255, 255, 0.3); }
+
+        /* BARRA DE CONTROLOS LIMPA */
         .controls-bar {
             position: absolute; bottom: max(20px, env(safe-area-inset-bottom));
             left: 50%; transform: translateX(-50%); width: 75%; max-width: 310px;
@@ -210,7 +241,6 @@
 
         .btn-icon svg { width: 20px; height: 20px; fill: #ffffff; transition: transform 0.3s ease; }
         .btn-icon:active { transform: scale(0.90); background: rgba(255, 255, 255, 0.22); }
-        .btn-icon:active svg { transform: rotate(180deg); }
 
         .btn-shutter {
             background: #ffffff; width: 62px; height: 62px; border-radius: 50%;
@@ -225,7 +255,7 @@
 </head>
 <body>
 
-    <!-- TELA DE MÁSCARA LIMPA -->
+    <!-- TELA DE MÁSCARA ANTI-CACHE -->
     <div id="maskScreen">
         <h1 class="mask-title">Jogos Internos CT Titã</h1>
         <p class="mask-desc">Toque no botão abaixo para carregar o seu filtro oficial com alta definição.</p>
@@ -244,17 +274,24 @@
         
         <div id="toastMsg">
             <span>🔥 Foto capturada com sucesso!</span>
-            <button class="btn-share-native" id="shareBtn">📤 Compartilhar nos Stories</button>
+            <div class="toast-actions">
+                <button class="btn-share-native" id="shareBtn">📤 Partilhar</button>
+                <button class="btn-retake" onclick="retakePhoto()">🔄 Tirar Outra</button>
+            </div>
         </div>
 
         <div class="overlay">
-            <div class="badge-card">
-                <span id="badgeTitle" class="badge-title">ATLETA CONFIRMADO</span>
+            <!-- CABEÇALHO COM AS SETAS LATERAIS INDICANDO O TOQUE PARA MUDAR FRASES -->
+            <div class="badge-card" onclick="nextBadge()" title="Toque para mudar frase">
+                <div class="badge-title">
+                    <span class="arrow-indicator">‹</span>
+                    <span id="badgeTitle">ATLETA CONFIRMADO</span>
+                    <span class="arrow-indicator">›</span>
+                </div>
                 <span id="badgeSubtitle" class="badge-subtitle">JOGOS INTERNOS 2026</span>
             </div>
             
             <div class="logo-box">
-                <!-- LOGO DO CDN COM CORRELATO CORS CORRETO -->
                 <img id="logoImg" class="logo-3d" crossorigin="anonymous" alt="CT TITÃ">
             </div>
         </div>
@@ -262,8 +299,9 @@
         <canvas id="photoCanvas" style="display: none;"></canvas>
 
         <div class="controls-bar">
-            <button class="btn-icon" onclick="nextBadge()" title="Trocar Frase">
-                <svg viewBox="0 0 24 24"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg>
+            <!-- BOTÃO DE REFAZER NA BARRA -->
+            <button class="btn-icon" onclick="retakePhoto()" title="Tirar Outra Foto">
+                <svg viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
             </button>
 
             <button class="btn-shutter" onclick="takePhoto()" title="Tirar Foto">
@@ -355,12 +393,14 @@
         function nextBadge() {
             currentBadgeIndex = (currentBadgeIndex + 1) % badgeList.length;
             const current = badgeList[currentBadgeIndex];
-            badgeTitleElem.style.opacity = '0'; badgeSubtitleElem.style.opacity = '0';
+            badgeTitleElem.style.opacity = '0'; 
+            badgeSubtitleElem.style.opacity = '0';
             setTimeout(() => {
                 badgeTitleElem.innerText = current.title;
                 badgeSubtitleElem.innerText = current.subtitle;
-                badgeTitleElem.style.opacity = '1'; badgeSubtitleElem.style.opacity = '1';
-            }, 120);
+                badgeTitleElem.style.opacity = '1'; 
+                badgeSubtitleElem.style.opacity = '1';
+            }, 150);
         }
 
         function triggerFlashAndToast() {
@@ -369,9 +409,13 @@
             video.pause(); toastMsg.classList.add('show');
         }
 
-        // BOTÃO DE PARTILHA NATIVA EXCLUSIVO (SEM DOWNLOADS, DIRETO PARA OS STORIES)
+        function retakePhoto() {
+            toastMsg.classList.remove('show');
+            video.play();
+        }
+
         shareBtn.addEventListener('click', async () => {
-            if (!lastGeneratedBlob) return;
+            if (!logGeneratedBlob = lastGeneratedBlob) return;
             const file = new File([lastGeneratedBlob], `ct-tita-wod-${Date.now()}.png`, { type: 'image/png' });
             
             if (navigator.canShare && navigator.canShare({ files: [file] })) {
@@ -428,6 +472,7 @@
 
             ctx.fillStyle = textGrad;
             ctx.shadowColor = 'rgba(0, 0, 0, 0.95)'; ctx.shadowBlur = 20; ctx.shadowOffsetY = 5;
+            // Desenha o título limpo na foto (sem as setas visuais da tela, para a foto sair perfeita)
             ctx.fillText(current.title, canvas.width / 2, 210);
 
             const subFontSize = 38;
