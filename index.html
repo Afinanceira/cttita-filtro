@@ -39,38 +39,6 @@
             z-index: 1;
         }
 
-        /* TELA DE CARREGAMENTO OBRIGATÓRIA DA PRIMEIRA ABERTURA */
-        #loaderScreen {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: #07070c;
-            z-index: 50;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 16px;
-            transition: opacity 0.35s ease;
-        }
-
-        .loader-spinner {
-            width: 52px;
-            height: 52px;
-            border: 4px solid rgba(255, 255, 255, 0.12);
-            border-top: 4px solid #dc2626;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-
-        .loader-text {
-            font-size: 26px;
-            letter-spacing: 2.5px;
-            color: #fff;
-            text-transform: uppercase;
-        }
-
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
         /* FUMAÇA ANIMADA NAS LATERAIS */
         .smoke-left {
             position: absolute;
@@ -156,6 +124,15 @@
             max-width: 210px;
             height: auto;
             filter: drop-shadow(0px 8px 16px rgba(0, 0, 0, 0.9));
+        }
+
+        .logo-text-fallback {
+            background: linear-gradient(90deg, #ef4444 20%, #ffffff 50%, #3b82f6 80%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 40px;
+            font-weight: 700;
+            letter-spacing: 5px;
         }
 
         /* EFEITO FLASH */
@@ -289,12 +266,6 @@
 </head>
 <body>
 
-    <!-- TELA DE CARREGAMENTO OBRIGATÓRIA DA PRIMEIRA ABERTURA -->
-    <div id="loaderScreen">
-        <div class="loader-spinner"></div>
-        <div class="loader-text">A carregar filtro...</div>
-    </div>
-
     <div class="stage" id="stageArea">
         <video id="webcam" autoplay playsinline muted></video>
 
@@ -315,7 +286,9 @@
             </div>
             
             <div class="logo-box">
-                <img id="logoImg" class="logo-3d" src="ct_tita_logo.png" alt="CT TITÃ">
+                <!-- CAMINHO DIRETO DA LOGO NO GITHUB COM SUPORTE A FALLBACK -->
+                <img id="logoImg" class="logo-3d" src="ct_tita_logo.png" onerror="tryLoadLogo(this)" alt="CT TITÃ">
+                <span id="logoFallback" class="logo-text-fallback" style="display:none;">CT TITÃ</span>
             </div>
         </div>
 
@@ -362,34 +335,22 @@
         const flashEffect = document.getElementById('flashEffect');
         const toastMsg = document.getElementById('toastMsg');
         const shareBtn = document.getElementById('shareBtn');
-        const loaderScreen = document.getElementById('loaderScreen');
 
-        // TRAVA DE SEGURANÇA: Só libera a tela e a câmara após a logo baixar 100%
-        let appReady = false;
+        // PRÉ-CARREGAMENTO INTELIGENTE DA LOGO PARA EVITAR FALHAS NA PRIMEIRA ABERTURA
+        const preloadedLogo = new Image();
+        preloadedLogo.src = 'ct_tita_logo.png';
 
-        function hideLoader() {
-            if (appReady) return;
-            appReady = true;
-            loaderScreen.style.opacity = '0';
-            setTimeout(() => { 
-                loaderScreen.style.display = 'none'; 
-            }, 350);
-            startCamera(currentFacingMode);
+        function tryLoadLogo(img) {
+            const paths = ['ct_tita_logo.png', './ct_tita_logo.png', 'ativos/texturas/ct_tita_logo.png', 'assets/textures/ct_tita_logo.png'];
+            let idx = parseInt(img.dataset.idx || '0');
+            if (idx < paths.length) {
+                img.dataset.idx = idx + 1;
+                img.src = paths[idx];
+            } else {
+                img.style.display = 'none';
+                document.getElementById('logoFallback').style.display = 'block';
+            }
         }
-
-        logoImg.onload = () => {
-            hideLoader();
-        };
-
-        logoImg.onerror = () => {
-            // Fallback de segurança caso ocorra qualquer instabilidade na rede
-            hideLoader();
-        };
-
-        // Segurança máxima: se por algum motivo a logo já estiver em cache, libera em 1.2s no máximo
-        setTimeout(() => {
-            hideLoader();
-        }, 1200);
 
         async function startCamera(facing) {
             if (currentStream) {
@@ -525,13 +486,16 @@
 
             ctx.restore();
 
-            if (logoImg.complete && logoImg.naturalWidth !== 0) {
+            // RENDERIZAÇÃO DA LOGO GARANTIDA (UTILIZA A IMAGEM PRÉ-CARREGADA OU A DA TELA)
+            const activeLogo = (preloadedLogo.complete && preloadedLogo.naturalWidth !== 0) ? preloadedLogo : logoImg;
+
+            if (activeLogo && activeLogo.complete && activeLogo.naturalWidth !== 0) {
                 const logoWidth = Math.round(canvas.width * 0.52);
-                const logoHeight = (logoImg.naturalHeight / logoImg.naturalWidth) * logoWidth;
+                const logoHeight = (activeLogo.naturalHeight / activeLogo.naturalWidth) * logoWidth;
                 const logoY = canvas.height - logoHeight - Math.round(canvas.height * 0.06);
 
                 ctx.shadowColor = 'transparent';
-                ctx.drawImage(logoImg, (canvas.width - logoWidth) / 2, logoY, logoWidth, logoHeight);
+                ctx.drawImage(activeLogo, (canvas.width - logoWidth) / 2, logoY, logoWidth, logoHeight);
             }
 
             ctx.shadowColor = 'transparent';
@@ -540,6 +504,8 @@
                 lastGeneratedBlob = blob;
             }, 'image/png', 1.0);
         }
+
+        window.addEventListener('load', () => startCamera(currentFacingMode));
     </script>
 </body>
 </html>
