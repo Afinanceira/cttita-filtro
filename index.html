@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>Jogos CT Titã - Filtro Oficial</title>
     <link href="https://fonts.googleapis.com/css2?family=Teko:wght@700&display=swap" rel="stylesheet">
     <style>
@@ -38,7 +41,7 @@
             z-index: 1;
         }
 
-        /* TELA DE MÁSCARA LIMPA E ELEGANTE */
+        /* TELA DE MÁSCARA ANTI-CACHE */
         #maskScreen {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -251,8 +254,8 @@
             </div>
             
             <div class="logo-box">
-                <!-- LOGO COM ATRIBUTO CROSSORIGIN PARA PERMITIR A PARTILHA NO CANVAS -->
-                <img id="logoImg" class="logo-3d" src="https://i.ibb.co/J15WVcr/ct-tita_logo.png" crossorigin="anonymous" alt="CT TITÃ">
+                <!-- LOGO DO CDN COM CORRELATO CORS CORRETO -->
+                <img id="logoImg" class="logo-3d" crossorigin="anonymous" alt="CT TITÃ">
             </div>
         </div>
 
@@ -275,7 +278,7 @@
 
     <script>
         window.addEventListener('pageshow', (event) => {
-            if (event.persisted) { window.location.reload(); }
+            if (event.persisted) { window.location.reload(true); }
         });
 
         const badgeList = [
@@ -301,8 +304,9 @@
         const stageArea = document.getElementById('stageArea');
 
         function initializeExperience() {
-            logoImg.crossOrigin = "anonymous";
-            
+            const cacheBuster = 'v=' + new Date().getTime();
+            logoImg.src = "https://i.ibb.co/J15WVcr/ct-tita_logo.png?" + cacheBuster;
+
             logoImg.onload = () => {
                 maskScreen.style.opacity = '0';
                 setTimeout(() => { 
@@ -365,9 +369,11 @@
             video.pause(); toastMsg.classList.add('show');
         }
 
+        // BOTÃO DE PARTILHA NATIVA EXCLUSIVO (SEM DOWNLOADS, DIRETO PARA OS STORIES)
         shareBtn.addEventListener('click', async () => {
             if (!lastGeneratedBlob) return;
             const file = new File([lastGeneratedBlob], `ct-tita-wod-${Date.now()}.png`, { type: 'image/png' });
+            
             if (navigator.canShare && navigator.canShare({ files: [file] })) {
                 try {
                     await navigator.share({
@@ -375,9 +381,14 @@
                         text: 'Meu WOD pago nos Jogos Internos do CT Titã! 🔥',
                         files: [file]
                     });
-                } catch (err) { console.log('Partilha cancelada', err); }
-            } else { alert('O seu navegador não suporta partilha direta de arquivos.'); }
-            toastMsg.classList.remove('show'); video.play();
+                } catch (err) { 
+                    if (err.name !== 'AbortError') { console.log('Partilha cancelada', err); }
+                }
+            } else {
+                alert('O seu navegador não suporta partilha direta de ficheiros. Utilize o Safari ou Google Chrome.');
+            }
+            toastMsg.classList.remove('show'); 
+            video.play();
         });
 
         function takePhoto() {
