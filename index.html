@@ -77,7 +77,7 @@
             padding: max(45px, env(safe-area-inset-top) + 15px) 15px max(95px, env(safe-area-inset-bottom)) 15px;
         }
 
-        /* TEXTO FLUTUANTE RETO E MAIOR (SEM CAIXA) */
+        /* TEXTO FLUTUANTE RETO E AMPLIADO (SEM CAIXA) */
         .badge-card {
             text-align: center;
             display: flex;
@@ -88,7 +88,7 @@
         }
 
         .badge-title {
-            font-size: clamp(40px, 9.5vw, 54px); /* Aumentado para maior impacto */
+            font-size: clamp(40px, 9.5vw, 54px);
             font-weight: 700;
             line-height: 0.9;
             letter-spacing: 2px;
@@ -100,7 +100,7 @@
         }
 
         .badge-subtitle {
-            font-size: clamp(16px, 4.2vw, 21px); /* Subtítulo ajustado e mais legível */
+            font-size: clamp(16px, 4.2vw, 21px);
             font-weight: 700;
             letter-spacing: 4px;
             color: #cbd5e1;
@@ -303,7 +303,7 @@
             </button>
 
             <button class="btn-icon" onclick="switchCam()" title="Inverter Câmera">
-                <svg viewBox="0 0 24 24"><path d="M20 4h-3.17L15 2H9L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/></svg>
+                <svg viewBox="0 0 24 24"><path d="M20 4h-3.17L15 2H9L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5 z"/></svg>
             </button>
         </div>
     </div>
@@ -317,7 +317,7 @@
 
         const badgeList = [
             { title: "ATLETA CONFIRMADO", subtitle: "JOGOS INTERNOS 2026" },
-            { title: "SOBREVIVI A PROVA", subtitle: "JOGOS INTERNOS 2026" },
+            { title: "SOBREVIVI AO WOD", subtitle: "JOGOS INTERNOS 2026" },
             { title: "RUMO AO PÓDIO", subtitle: "JOGOS INTERNOS 2026" },
             { title: "MODO TITÃ", subtitle: "JOGOS INTERNOS 2026" }
         ];
@@ -339,7 +339,7 @@
         preloadedLogo.src = 'ct_tita_logo.png';
 
         function tryLoadLogo(img) {
-            const paths = ['ativos/texturas/ct_tita_logo.png', 'ativos/ texturas/ct_tita_logo.png', 'assets/textures/ct_tita_logo.png'];
+            const paths = ['ct_tita_logo.png', './ct_tita_logo.png', 'ativos/texturas/ct_tita_logo.png', 'assets/textures/ct_tita_logo.png'];
             let idx = parseInt(img.dataset.idx || '0');
             if (idx < paths.length) {
                 img.dataset.idx = idx + 1;
@@ -458,12 +458,10 @@
             ctx.fillStyle = gradRight;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // RENDERIZAÇÃO DO TEXTO MAIOR E RETO NO CANVAS
             ctx.save();
             const current = badgeList[currentBadgeIndex];
 
-            // Título Principal Maior e com Sombra Robusta
-            const titleFontSize = 90; // Proporção ampliada para alta resolução
+            const titleFontSize = 90;
             ctx.font = `700 ${titleFontSize}px "Teko", sans-serif`;
             ctx.textAlign = 'center';
             
@@ -478,7 +476,6 @@
             ctx.shadowOffsetY = 5;
             ctx.fillText(current.title, canvas.width / 2, 210);
 
-            // Subtítulo / Legenda Ajustada
             const subFontSize = 38;
             ctx.font = `700 ${subFontSize}px "Teko", sans-serif`;
             ctx.fillStyle = '#cbd5e1';
@@ -487,10 +484,9 @@
 
             ctx.restore();
 
-            // RENDERIZAÇÃO DA LOGO NO RODAPÉ
             const activeLogo = (preloadedLogo.complete && preloadedLogo.naturalWidth !== 0) ? preloadedLogo : logoImg;
 
-            if (activeLogo.complete && activeLogo.naturalWidth !== 0) {
+            if (activeLogo && activeLogo.complete && activeLogo.naturalWidth !== 0) {
                 const logoWidth = Math.round(canvas.width * 0.52);
                 const logoHeight = (activeLogo.naturalHeight / activeLogo.naturalWidth) * logoWidth;
                 const logoY = canvas.height - logoHeight - Math.round(canvas.height * 0.06);
