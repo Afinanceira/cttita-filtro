@@ -6,7 +6,7 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-age=0">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>Jogos CT Titã - Filtro Oficial</title>
+    <title>Inter Games CT Titã - Filtro Oficial</title>
     <link href="https://fonts.googleapis.com/css2?family=Teko:wght@700&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -41,7 +41,7 @@
             z-index: 1;
         }
 
-        /* TELA DE MÁSCARA COM AUTO-ATUALIZAÇÃO FORÇADA */
+        /* TELA DE MÁSCARA COM AUTO-ATUALIZAÇÃO */
         #maskScreen {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -286,7 +286,7 @@
                     <span id="badgeTitle">ATLETA CONFIRMADO</span>
                     <span class="arrow-indicator">›</span>
                 </div>
-                <span id="badgeSubtitle" class="badge-subtitle">JOGOS INTERNOS 2026</span>
+                <span id="badgeSubtitle" class="badge-subtitle">INTER GAMES 2026</span>
             </div>
             
             <div class="logo-box">
@@ -296,7 +296,7 @@
 
         <canvas id="photoCanvas" style="display: none;"></canvas>
 
-        <!-- BARRA COM APENAS INVERTER CÂMARA E DISPARADOR -->
+        <!-- BARRA COM INVERTER CÂMARA CORRETO E DISPARADOR -->
         <div class="controls-bar">
             <button class="btn-icon" onclick="switchCam()" title="Inverter Câmera">
                 <svg viewBox="0 0 24 24"><path d="M20 4h-3.17L15 2H9L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/></svg>
@@ -311,7 +311,7 @@
     <script>
         // MECANISMO DE AUTO-ATUALIZAÇÃO DE VERSÃO (FORÇA RECARREGAMENTO SEM CACHE ANTIGO)
         (function() {
-            const APP_VERSION = '2026.11.12-v5'; // Versão atualizada para forçar refresh em quem já acessou
+            const APP_VERSION = '2026.11.12-v6'; // Atualizado para forçar atualização imediata
             const storedVersion = localStorage.getItem('ct_tita_app_ver');
             if (storedVersion !== APP_VERSION) {
                 localStorage.setItem('ct_tita_app_ver', APP_VERSION);
@@ -423,13 +423,13 @@
 
         shareBtn.addEventListener('click', async () => {
             if (!lastGeneratedBlob) return;
-            const file = new File([lastGeneratedBlob], `ct-tita-wod-${Date.now()}.png`, { type: 'image/png' });
+            const file = new File([lastGeneratedBlob], `inter-games-${Date.now()}.png`, { type: 'image/png' });
             
             if (navigator.canShare && navigator.canShare({ files: [file] })) {
                 try {
                     await navigator.share({
-                        title: 'Jogos CT Titã',
-                        text: 'Meu WOD pago nos Jogos Internos do CT Titã! 🔥',
+                        title: 'Inter Games CT Titã',
+                        text: 'Meu WOD pago no Inter Games do CT Titã! 🔥',
                         files: [file]
                     });
                 } catch (err) { 
